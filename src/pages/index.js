@@ -204,7 +204,7 @@ const WorksWrapper = styled.div`
 
 const WorksInfo = styled.div`
   position: absolute;
-  top: 1px;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
