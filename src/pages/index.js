@@ -211,8 +211,8 @@ const WorksInfo = styled.div`
   width: 100%;
   height: 100%;
   transform: translateY(100%);
-  background-color: #ffffff;
-  color: #2200d2;
+  background-color: #2200d2;
+  color: #ffffff;
   transition: all 0.2s ease-in-out;
   font-family: Moderat-Bold, sans-serif;
 `
