@@ -317,7 +317,7 @@ const IndexPage = () => {
                   <WorksWrapper>
                     <WorksItem>
                       <Img fluid={data.imageAccenture.childImageSharp.fluid} />
-                      <WorksInfo>Accenturex</WorksInfo>
+                      <WorksInfo>Accenture</WorksInfo>
                     </WorksItem>
                     <WorksItem>
                       <Img fluid={data.imageHanamasa.childImageSharp.fluid} />
