@@ -124,7 +124,7 @@ const ContactInfo = styled.div`
   width: 40%;
 `
 
-const ContactForm = styled.div`
+const ContactForm = styled.form`
   width: 60%;
 `
 
@@ -349,7 +349,12 @@ const IndexPage = () => {
                       <ContactText>contact@naisu.id</ContactText>
                       <ContactText>021-2345678910</ContactText>
                     </ContactInfo>
-                    <ContactForm>
+
+                    <ContactForm
+                      name="contact"
+                      method="post"
+                      data-netlify="true"
+                    >
                       <FormRow>
                         <FormLabel>Matter</FormLabel>
                         <FormInput>
@@ -391,25 +396,40 @@ const IndexPage = () => {
                       <FormRow>
                         <FormLabel>Name</FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="John Doe" />
+                          <InputText
+                            type="text"
+                            placeholder="John Doe"
+                            name="name"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow>
                         <FormLabel>Email</FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="john@email.com" />
+                          <InputText
+                            type="text"
+                            placeholder="john@email.com"
+                            name="email"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow>
                         <FormLabel>Phone </FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="081234567890" />
+                          <InputText
+                            type="text"
+                            placeholder="081234567890"
+                            name="phone"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow top>
                         <FormLabel>Message </FormLabel>
                         <FormInput>
-                          <TextArea placeholder="Hello, Naisu!" />
+                          <TextArea
+                            placeholder="Hello, Naisu!"
+                            name="message"
+                          />
                         </FormInput>
                       </FormRow>
                       <ButtonSubmit type="submit">Submit</ButtonSubmit>
