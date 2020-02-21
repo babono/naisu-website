@@ -23,15 +23,13 @@ module.exports = {
     {
       resolve: "gatsby-source-prismic-graphql",
       options: {
-        repositoryName: "Naisu", // (REQUIRED, replace with your own)
+        repositoryName: "babono", // (REQUIRED, replace with your own)
         accessToken:
           "MC5YazY2dnhFQUFDUUFmV3Mx.d--_ve-_ve-_vXJgKe-_vUDvv73vv70O77-977-9Z2kLZjfvv73vv70477-9XSzvv71A77-977-9QO-_ve-_vQ", // (optional API access token)
-        path: "/preview", // (optional preview path. Default: /preview)
-        previews: true, // (optional, activated Previews. Default: false)
         pages: [
           {
             // (optional, builds pages dynamically)
-            type: "works", // TypeName from prismic
+            type: "Works", // TypeName from prismic
             match: "/w/:uid", // Pages will be generated under this pattern
             path: "/w", // Placeholder page for unpublished documents
             component: require.resolve("./src/templates/works.js"),

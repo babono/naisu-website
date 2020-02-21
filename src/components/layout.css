@@ -23,7 +23,6 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #2200d8;
 }
 article,
 aside,
@@ -638,7 +637,7 @@ pre tt:after {
   }
 }
 
-body:before {
+html.fp-enabled body:before {
   content: "";
   background-repeat: no-repeat;
   background-position: center;
@@ -648,11 +647,12 @@ body:before {
   height: 100%;
   -webkit-transition: all 0.5s linear;
   transition: all 0.5s linear;
+  background-color: #2200d8;
   background-image: url(../images/image-smiley.svg);
 }
 
-body.fp-viewing-1:before,
-body.fp-viewing-2:before {
+html.fp-enabled body.fp-viewing-1:before,
+html.fp-enabled body.fp-viewing-2:before {
   opacity: 35%;
 }
 
