@@ -1,9 +1,11 @@
 import React from "react"
 import { graphql } from "gatsby"
-import { RichText } from "prismic-reactjs"
-import styled from "styled-components"
+import { Link, RichText, Date } from "prismic-reactjs"
+import styled, { keyframes } from "styled-components"
 import BackgroundImage from "gatsby-background-image"
-import get from "lodash/get"
+import iconClose from "../images/ic-close.svg"
+import iconArrowDown from "../images/ic-arrow-down.svg"
+import iconArrowUp from "../images/ic-arrow-up.svg"
 
 export const query = graphql`
   query PageQuery($uid: String) {
@@ -22,10 +24,16 @@ export const query = graphql`
                 }
               }
             }
-
+            link_website {
+              _linkType
+              ... on PRISMIC__ExternalLink {
+                _linkType
+                url
+              }
+            }
             category {
-              description
-              name
+              category_description
+              category_name
             }
           }
         }
@@ -34,22 +42,170 @@ export const query = graphql`
   }
 `
 
+const ActionWrapper = styled.div`
+  margin-bottom: 120px;
+`
+
+const ButtonClose = styled.button`
+  width: 48px;
+  height: 48px;
+  background-position: center;
+  background-size: contain;
+  background-image: url(${iconClose});
+  background-color: transparent;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+`
+
+const blinkingDown = keyframes`
+  0% {
+    transform: translateY(8px);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: translateY(8px);
+    opacity: 0.35;
+  }
+`
+
+const ButtonScrollDown = styled.button`
+  width: 48px;
+  height: 48px;
+  background-position: center;
+  background-size: contain;
+  background-image: url(${iconArrowDown});
+  background-color: transparent;
+  background-repeat: no-repeat;
+  opacity: 0.35;
+  border: none;
+  margin: 0 auto;
+  outline: none;
+  cursor: pointer;
+
+  animation: ${blinkingDown} 1.75s ease-out infinite;
+`
+
+const ButtonScrollUp = styled.button`
+  width: 48px;
+  height: 48px;
+  background-position: center;
+  background-size: contain;
+  background-image: url(${iconArrowUp});
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+`
+
+const ButtonLink = styled.a`
+  display: inline-block;
+  text-transform: uppercase;
+  color: #2200d2;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  padding: 12px 48px;
+  background-color: #ffffff;
+  font-family: Moderat-Bold, sans-serif;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in;
+  &:hover {
+    background-color: #e9e9e9;
+    transform: translateY(-8px);
+  }
+`
+
 const Container = styled.div`
-  max-width: 992px;
+  max-width: 600px;
+  text-align: center;
   margin: 0 auto;
   padding: 0 16px;
 `
 
+const ContainerHero = styled.div`
+  max-width: 600px;
+  text-align: center;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
+
 const CompanyLogo = styled.img``
 
-const ProjectCategory = styled.div``
+const Copyright = styled.div`
+  font-size: 14px;
+  text-align: center;
+`
 
-const ProjectTitle = styled.div``
-
-const ProjectDescription = styled.h2``
+const Detail = styled.div`
+  padding: 100px 0 32px;
+  position: relative;
+`
 
 const Hero = styled(BackgroundImage)`
   min-height: 100vh;
+  position: relative;
+`
+
+const ProjectCategory = styled.div`
+  margin-bottom: 48px;
+`
+
+const ProjectCategoryItem = styled.span`
+  font-family: Moderat-Bold, sans-serif;
+  font-size: 20px;
+  color: #ffffff;
+  &:after {
+    content: ", ";
+  }
+  &:last-child:after {
+    display: none;
+  }
+`
+
+const ProjectCategoryDetail = styled.div`
+  font-size: 16px;
+  letter-spacing: 0.1em;
+`
+
+const ProjectCategoryTitle = styled.div`
+  font-family: Moderat-Bold, sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+`
+
+const ProjectTitle = styled.h1`
+  font-family: Moderat-Bold, sans-serif;
+  color: #ffffff;
+  font-size: 36px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+`
+
+const ProjectDescription = styled.div`
+  font-size: 16px;
+  color: #ffffff;
+  margin-bottom: 64px;
 `
 
 const Works = props => {
@@ -63,22 +219,44 @@ const Works = props => {
         fluid={doc.node.header_imageSharp.childImageSharp.fluid}
         backgroundColor={`#040e18`}
       >
-        <Container>
-          <CompanyLogo />
-          <ProjectTitle>{RichText.render(doc.node.title)}</ProjectTitle>
+        <ContainerHero>
+          <CompanyLogo src={doc.node.logo_company.url} />
+          <ProjectTitle>{RichText.asText(doc.node.title)}</ProjectTitle>
           <ProjectCategory>
-            {doc.node.category.map(function(category) {
-              return {
-                categoryDescription: category.category_description,
-                categoryName: category.category_name,
-              }
-            })}
+            {doc.node.category.map(category => (
+              <ProjectCategoryItem>
+                {RichText.asText(category.category_name)}
+              </ProjectCategoryItem>
+            ))}
           </ProjectCategory>
           <ProjectDescription>
-            {RichText.render(doc.node.project_description)}
+            {RichText.asText(doc.node.project_description)}
           </ProjectDescription>
-        </Container>
+          <ActionWrapper>
+            <ButtonLink href={doc.node.link_website.url}>
+              Go To Website
+            </ButtonLink>
+          </ActionWrapper>
+          <ButtonScrollDown></ButtonScrollDown>
+          <ButtonClose></ButtonClose>
+        </ContainerHero>
       </Hero>
+      <Detail>
+        <Container>
+          {doc.node.category.map(category => (
+            <>
+              <ProjectCategoryTitle>
+                {RichText.asText(category.category_name)}
+              </ProjectCategoryTitle>
+              <ProjectCategoryDetail>
+                {RichText.render(category.category_description)}
+              </ProjectCategoryDetail>
+            </>
+          ))}
+          <Copyright>2020 © Naisu Studio</Copyright>
+        </Container>
+        <ButtonScrollUp></ButtonScrollUp>
+      </Detail>
     </>
   )
 }
