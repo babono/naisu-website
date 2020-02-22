@@ -659,13 +659,17 @@ html.fp-enabled body {
   background-color: #2200d8;
 }
 
-html.fp-enabled body.fp-viewing-1:before,
-html.fp-enabled body.fp-viewing-2:before {
+html.fp-enabled body.fp-viewing-intro:before,
+html.fp-enabled body.fp-viewing-about:before {
   opacity: 35%;
 }
 
-#works,
-#contact {
+.fp-viewing-works #menu > a:first-child,
+.fp-viewing-reach #menu > a:last-child {
+  color: rgba(255, 255, 255, 1);
+}
+
+.bgBlue {
   background-color: #2200d8;
 }
 

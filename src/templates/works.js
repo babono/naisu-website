@@ -277,7 +277,7 @@ const Works = props => {
           <ButtonScrollDown
             onClick={() => scrollTo("#content")}
           ></ButtonScrollDown>
-          <ButtonClose to="/"></ButtonClose>
+          <ButtonClose to="/#works"></ButtonClose>
         </ContainerHero>
       </Hero>
       <Detail id="content">

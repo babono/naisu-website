@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-
+import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ReactFullpage from "@fullpage/react-fullpage"
@@ -63,7 +63,8 @@ const HeaderMenu = styled.div`
   justify-content: space-between;
 `
 
-const HeaderMenuLink = styled.div`
+const HeaderMenuLink = styled.a`
+  text-decoration: none;
   font-family: Moderat-Regular, sans-serif;
   font-size: 16px;
   color: ${props =>
@@ -217,7 +218,7 @@ const WorksInfo = styled.div`
   font-family: Moderat-Bold, sans-serif;
 `
 
-const WorksItem = styled.div`
+const WorksItem = styled(Link)`
   flex: 0 0 auto;
   width: 24.375%;
   position: relative;
@@ -232,52 +233,58 @@ const WorksItem = styled.div`
 
 const WorksImage = styled.img``
 
-const IndexPage = () => {
-  const [contactTopic, setContactTopic] = useState("Business")
-
-  const data = useStaticQuery(graphql`
-    query {
-      imageAccenture: file(relativePath: { eq: "image-banner-accenture.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-      imageHanamasa: file(relativePath: { eq: "image-banner-hanamasa.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-      imageMandiriUpdate: file(
-        relativePath: { eq: "image-banner-mandiri-update.jpg" }
-      ) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-      imagePronto: file(relativePath: { eq: "image-banner-pronto.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
+export const query = graphql`
+  query HomeQuery {
+    prismic {
+      allWorkss {
+        edges {
+          node {
+            title
+            _meta {
+              uid
+            }
+            image_thumbnail
+            image_thumbnailSharp {
+              childImageSharp {
+                fluid(maxWidth: 320) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
           }
         }
       }
     }
-  `)
+  }
+`
+
+const RenderWorkList = ({ works }) => {
+  return works.map(item => (
+    <WorksItem key={item.node._meta.uid} to={"/w/" + item.node._meta.uid}>
+      <Img fluid={item.node.image_thumbnailSharp.childImageSharp.fluid} />
+      <WorksInfo>{RichText.asText(item.node.title)}</WorksInfo>
+    </WorksItem>
+  ))
+}
+
+export default ({ data }) => {
+  const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
+  if (!doc) return null
+
+  const [contactTopic, setContactTopic] = useState("Business")
 
   return (
     <Layout>
       <SEO title="Naisu Studio The New Future" />
       <Header>
         <HeaderContainer>
-          <HeaderMenu>
-            <HeaderMenuLink>works</HeaderMenuLink>
-            <HeaderMenuLink>reach us</HeaderMenuLink>
+          <HeaderMenu id="menu">
+            <HeaderMenuLink data-menuanchor="works" href="#works">
+              works
+            </HeaderMenuLink>
+            <HeaderMenuLink data-menuanchor="reach" href="#reach">
+              reach us
+            </HeaderMenuLink>
           </HeaderMenu>
           <HeaderLogoLink>
             <HeaderLogo>NAISU Studio</HeaderLogo>
@@ -288,22 +295,23 @@ const IndexPage = () => {
         //fullpage options
         licenseKey={"YOUR_KEY_HERE"}
         scrollingSpeed={1000} /* Options here */
+        anchors={["home", "intro", "about", "works", "reach"]}
         render={({ state, fullpageApi }) => {
           return (
             <ReactFullpage.Wrapper>
-              <section className="section" id="intro-1">
+              <section className="section">
                 <Container>
                   <IntroText1>
                     Feeling misguided? Take a step closes to us.
                   </IntroText1>
                 </Container>
               </section>
-              <section className="section" id="intro-2">
+              <section className="section">
                 <Container>
                   <IntroImage src={imageIntro} alt="image introducing" />
                 </Container>
               </section>
-              <section className="section" id="intro-3">
+              <section className="section">
                 <Container>
                   <IntroText3>
                     Bespoke creative and digital solutions with
@@ -312,31 +320,14 @@ const IndexPage = () => {
                   </IntroText3>
                 </Container>
               </section>
-              <section className="section" id="works">
+              <section className="section bgBlue">
                 <Container>
                   <WorksWrapper>
-                    <WorksItem>
-                      <Img fluid={data.imageAccenture.childImageSharp.fluid} />
-                      <WorksInfo>Accenture</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img fluid={data.imageHanamasa.childImageSharp.fluid} />
-                      <WorksInfo>Hanamasa</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img
-                        fluid={data.imageMandiriUpdate.childImageSharp.fluid}
-                      />
-                      <WorksInfo>BUMN</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img fluid={data.imagePronto.childImageSharp.fluid} />
-                      <WorksInfo>Pronto</WorksInfo>
-                    </WorksItem>
+                    <RenderWorkList works={data.prismic.allWorkss.edges} />
                   </WorksWrapper>
                 </Container>
               </section>
-              <section className="section" id="contact">
+              <section className="section bgBlue">
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
@@ -444,5 +435,3 @@ const IndexPage = () => {
     </Layout>
   )
 }
-
-export default IndexPage
