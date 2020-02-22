@@ -1,11 +1,13 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { graphql } from "gatsby"
-import { Link, RichText, Date } from "prismic-reactjs"
+import { Link } from "gatsby"
+import { RichText } from "prismic-reactjs"
 import styled, { keyframes } from "styled-components"
 import BackgroundImage from "gatsby-background-image"
 import iconClose from "../images/ic-close.svg"
 import iconArrowDown from "../images/ic-arrow-down.svg"
 import iconArrowUp from "../images/ic-arrow-up.svg"
+import scrollTo from "gatsby-plugin-smoothscroll"
 
 export const query = graphql`
   query PageQuery($uid: String) {
@@ -46,7 +48,7 @@ const ActionWrapper = styled.div`
   margin-bottom: 120px;
 `
 
-const ButtonClose = styled.button`
+const ButtonClose = styled(Link)`
   width: 48px;
   height: 48px;
   background-position: center;
@@ -110,6 +112,9 @@ const ButtonScrollUp = styled.button`
   position: fixed;
   bottom: 32px;
   right: 32px;
+  transition: all 0.5s ease-in;
+  transform: ${props =>
+    props.scrolled ? "translateY(0)" : "translateY(200px)"};
 `
 
 const ButtonLink = styled.a`
@@ -209,12 +214,44 @@ const ProjectDescription = styled.div`
 `
 
 const Works = props => {
+  const [scrollY, setScrollY] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  function scrolled() {
+    setScrollY(window.pageYOffset)
+    if (
+      scrollY >
+      Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+    ) {
+      console.log("waadaw")
+      setIsScrolled(true)
+    } else {
+      setIsScrolled(false)
+    }
+  }
+
+  useEffect(() => {
+    function watchScroll() {
+      window.addEventListener("scroll", scrolled)
+    }
+    watchScroll()
+    return () => {
+      window.removeEventListener("scroll", scrolled)
+    }
+  })
+
   const doc = props.data.prismic.allWorkss.edges.slice(0, 1).pop()
   if (!doc) return null
+
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line global-require
+    require("smooth-scroll")('a[href*="#"]')
+  }
 
   return (
     <>
       <Hero
+        id="top"
         Tag="div"
         fluid={doc.node.header_imageSharp.childImageSharp.fluid}
         backgroundColor={`#040e18`}
@@ -237,11 +274,13 @@ const Works = props => {
               Go To Website
             </ButtonLink>
           </ActionWrapper>
-          <ButtonScrollDown></ButtonScrollDown>
-          <ButtonClose></ButtonClose>
+          <ButtonScrollDown
+            onClick={() => scrollTo("#content")}
+          ></ButtonScrollDown>
+          <ButtonClose to="/"></ButtonClose>
         </ContainerHero>
       </Hero>
-      <Detail>
+      <Detail id="content">
         <Container>
           {doc.node.category.map(category => (
             <>
@@ -255,7 +294,10 @@ const Works = props => {
           ))}
           <Copyright>2020 © Naisu Studio</Copyright>
         </Container>
-        <ButtonScrollUp></ButtonScrollUp>
+        <ButtonScrollUp
+          scrolled={isScrolled}
+          onClick={() => scrollTo("#top")}
+        ></ButtonScrollUp>
       </Detail>
     </>
   )
