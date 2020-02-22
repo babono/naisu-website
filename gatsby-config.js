@@ -22,6 +22,12 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-styled-components`,
+      options: {
+        // Add any options here
+      },
+    },
+    {
       resolve: "gatsby-source-prismic-graphql",
       options: {
         repositoryName: "babono", // (REQUIRED, replace with your own)
