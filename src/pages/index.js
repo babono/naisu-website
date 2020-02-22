@@ -277,12 +277,8 @@ export default ({ data }) => {
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
-            <HeaderMenuLink data-menuanchor="works" href="#works">
-              works
-            </HeaderMenuLink>
-            <HeaderMenuLink data-menuanchor="reach" href="#reach">
-              reach us
-            </HeaderMenuLink>
+            <HeaderMenuLink href="#works">works</HeaderMenuLink>
+            <HeaderMenuLink href="#reach">reach us</HeaderMenuLink>
           </HeaderMenu>
           <HeaderLogoLink>
             <HeaderLogo>NAISU Studio</HeaderLogo>
