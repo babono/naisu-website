@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
-import Helmet from "react-helmet"
 import ReactFullpage from "@fullpage/react-fullpage"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
@@ -275,7 +274,6 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title="Naisu Studio The New Future" />
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
@@ -356,9 +354,10 @@ export default ({ data }) => {
                               name="contactTopic"
                               value="Business"
                               checked={contactTopic === "Business"}
+                              onChange={() => {}}
                               onClick={() => setContactTopic("Business")}
                             />
-                            <label for="business">Business</label>
+                            <label htmlFor="business">Business</label>
                           </RadioButton>
                           <RadioButton>
                             <input
@@ -367,9 +366,10 @@ export default ({ data }) => {
                               name="contactTopic"
                               value="Jobs"
                               checked={contactTopic === "Jobs"}
+                              onChange={() => {}}
                               onClick={() => setContactTopic("Jobs")}
                             />
-                            <label for="jobs">Jobs &amp; Internship</label>
+                            <label htmlFor="jobs">Jobs &amp; Internship</label>
                           </RadioButton>
                           <RadioButton>
                             <input
@@ -378,9 +378,10 @@ export default ({ data }) => {
                               name="contactTopic"
                               value="Others"
                               checked={contactTopic === "Others"}
+                              onChange={() => {}}
                               onClick={() => setContactTopic("Others")}
                             />
-                            <label for="other">Others</label>
+                            <label htmlFor="other">Others</label>
                           </RadioButton>
                         </FormInput>
                       </FormRow>
