@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import Helmet from "react-helmet"
 import { graphql } from "gatsby"
 import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
@@ -250,6 +251,7 @@ const Works = props => {
 
   return (
     <>
+      <Helmet title={RichText.asText(doc.node.title)} />
       <Hero
         id="top"
         Tag="div"

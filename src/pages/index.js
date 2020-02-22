@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Helmet from "react-helmet"
 import ReactFullpage from "@fullpage/react-fullpage"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
@@ -275,7 +275,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <SEO title="Naisu Studio The New Future" />
+      <Helmet title="Naisu Studio The New Future" />
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
