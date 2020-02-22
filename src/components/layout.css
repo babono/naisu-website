@@ -661,7 +661,7 @@ html.fp-enabled body {
 
 html.fp-enabled body.fp-viewing-intro:before,
 html.fp-enabled body.fp-viewing-about:before {
-  opacity: 35%;
+  opacity: 0.35;
 }
 
 .fp-viewing-works #menu > a:first-child,
