@@ -291,7 +291,7 @@ export default ({ data }) => {
       </Header>
       <ReactFullpage
         //fullpage options
-        licenseKey={"YOUR_KEY_HERE"}
+        licenseKey={"9B29255F-E1964991-AD6B9214-8C392F88"}
         scrollingSpeed={1000} /* Options here */
         anchors={["home", "intro", "about", "works", "reach"]}
         render={({ state, fullpageApi }) => {
