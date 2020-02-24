@@ -33,6 +33,11 @@ const IntroText1 = styled.div`
   font-size: 28px;
   text-align: center;
   padding-top: 85vh;
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 24px;
+    padding-top: 70vh;
+  }
 `
 
 const IntroText3 = styled.div`
@@ -41,6 +46,10 @@ const IntroText3 = styled.div`
   font-family: Moderat-Bold, sans-serif;
   font-size: 44px;
   text-align: center;
+  @media (max-width: 768px) {
+    font-size: 24px;
+    line-height: 40px;
+  }
 `
 
 const Header = styled.header`
@@ -55,6 +64,9 @@ const HeaderContainer = styled.div`
   max-width: 97%;
   padding: 40px 48px;
   position: relative;
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
 `
 
 const HeaderMenu = styled.div`
@@ -75,6 +87,9 @@ const HeaderMenuLink = styled.a`
   &:hover {
     color: rgba(255, 255, 255, 1);
   }
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `
 
 const HeaderLogo = styled.h1`
@@ -94,6 +109,11 @@ const HeaderLogoLink = styled.a`
   background-position: center;
   -webkit-transition: background 0.5s linear;
   transition: background 0.5s linear;
+  @media (max-width: 768px) {
+    width: 84px;
+    margin-left: -42px;
+    top: 8px;
+  }
 `
 
 const AddressTitle = styled.div`
@@ -101,6 +121,9 @@ const AddressTitle = styled.div`
   font-family: Moderat-Bold, sans-serif;
   color: #ffffff;
   letter-spacing: 0.2em;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `
 
 const AddressDetail = styled.div`
@@ -108,30 +131,51 @@ const AddressDetail = styled.div`
   margin: 24px 0;
   color: #ffffff;
   letter-spacing: 0.1em;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `
 
 const ContactText = styled.div`
   font-size: 16px;
   color: #ffffff;
   letter-spacing: 0.1em;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `
 
 const ContactContainer = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `
 
 const ContactInfo = styled.div`
   width: 40%;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 16px;
+    padding-top: 80px;
+  }
 `
 
 const ContactForm = styled.form`
   width: 60%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 const FormRow = styled.div`
   display: flex;
   margin-bottom: 24px;
   align-items: ${props => (props.top ? "flex-start" : "center")};
+  @media (max-width: 768px) {
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
 `
 
 const FormLabel = styled.div`
@@ -140,18 +184,31 @@ const FormLabel = styled.div`
   font-size: 16px;
   letter-spacing: 0.1em;
   font-family: Moderat-Bold, sans-serif;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 `
 
 const FormInput = styled.div`
   display: flex;
   align-items: center;
   flex: 1 1 auto;
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 `
 
 const RadioButton = styled.div`
   display: flex;
   align-items: center;
   margin-right: 32px;
+  @media (max-width: 768px) {
+    width: 50%;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
 `
 
 const InputText = styled.input`
@@ -178,6 +235,9 @@ const TextArea = styled.textarea`
   &:focus {
     outline: auto 2px #fff;
   }
+  @media (max-width: 768px) {
+    height: 80px;
+  }
 `
 
 const ButtonSubmit = styled.button`
@@ -200,6 +260,9 @@ const ButtonSubmit = styled.button`
 const WorksWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `
 
 const WorksInfo = styled.div`
@@ -227,6 +290,10 @@ const WorksItem = styled(Link)`
   }
   &:hover ${WorksInfo} {
     transform: translateY(0);
+  }
+  @media (max-width: 768px) {
+    width: 48%;
+    margin-bottom: 16px;
   }
 `
 
@@ -321,7 +388,7 @@ export default ({ data }) => {
                   </WorksWrapper>
                 </Container>
               </section>
-              <section className="section bgBlue">
+              <section className="section bgBlue fp-auto-height-responsive">
                 <Container>
                   <ContactContainer>
                     <ContactInfo>

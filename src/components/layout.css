@@ -718,3 +718,9 @@ html.fp-enabled body.fp-viewing-about:before {
   opacity: 1;
   transform: scale(1);
 }
+
+@media only screen and (max-width: 600px) {
+  html.fp-enabled body:before {
+    background-size: 70%;
+  }
+}

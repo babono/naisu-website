@@ -224,7 +224,6 @@ const Works = props => {
       scrollY >
       Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
     ) {
-      console.log("waadaw")
       setIsScrolled(true)
     } else {
       setIsScrolled(false)
