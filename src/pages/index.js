@@ -356,6 +356,7 @@ export default ({ data }) => {
         //fullpage options
         licenseKey={"9B29255F-E1964991-AD6B9214-8C392F88"}
         scrollingSpeed={1000} /* Options here */
+        scrollOverflow={true}
         anchors={["home", "intro", "about", "works", "reach"]}
         render={({ state, fullpageApi }) => {
           return (

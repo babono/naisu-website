@@ -162,7 +162,7 @@ const Copyright = styled.div`
 `
 
 const Detail = styled.div`
-  padding: 100px 0 32px;
+  padding: 80px 0 32px;
   position: relative;
 `
 
