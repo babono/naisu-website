@@ -719,6 +719,12 @@ html.fp-enabled body.fp-viewing-about:before {
   transform: scale(1);
 }
 
+.block-img {
+  margin: 0;
+  line-height: 0;
+  margin-bottom: 16px;
+}
+
 @media only screen and (max-width: 600px) {
   html.fp-enabled body:before {
     background-size: 70%;
