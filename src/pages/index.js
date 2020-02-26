@@ -80,7 +80,7 @@ const HeaderMenuLink = styled.a`
   font-family: Moderat-Regular, sans-serif;
   font-size: 16px;
   color: ${props =>
-    props.active ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.5)"};
+    props.active ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.75)"};
   text-transform: uppercase;
   letter-spacing: 3px;
   transition: color 0.5s linear;
