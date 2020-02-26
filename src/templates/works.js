@@ -232,11 +232,11 @@ const Works = props => {
 
   useEffect(() => {
     function watchScroll() {
-      window.addEventListener("scroll", scrolled)
+      window.addEventListener("scroll", scrolled, { passive: true })
     }
     watchScroll()
     return () => {
-      window.removeEventListener("scroll", scrolled)
+      window.removeEventListener("scroll", scrolled, { passive: true })
     }
   })
 

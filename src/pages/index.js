@@ -452,9 +452,10 @@ export default ({ data }) => {
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel htmlFor="name">Name</FormLabel>
                         <FormInput>
                           <InputText
+                            id="name"
                             type="text"
                             placeholder="John Doe"
                             name="name"
@@ -462,9 +463,10 @@ export default ({ data }) => {
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel htmlFor="email">Email</FormLabel>
                         <FormInput>
                           <InputText
+                            id="email"
                             type="text"
                             placeholder="john@email.com"
                             name="email"
@@ -472,9 +474,10 @@ export default ({ data }) => {
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Phone </FormLabel>
+                        <FormLabel htmlFor="phone">Phone </FormLabel>
                         <FormInput>
                           <InputText
+                            id="phone"
                             type="text"
                             placeholder="081234567890"
                             name="phone"
@@ -482,9 +485,10 @@ export default ({ data }) => {
                         </FormInput>
                       </FormRow>
                       <FormRow top>
-                        <FormLabel>Message </FormLabel>
+                        <FormLabel htmlFor="message">Message </FormLabel>
                         <FormInput>
                           <TextArea
+                            id="message"
                             placeholder="Hello, Naisu!"
                             name="message"
                           />
