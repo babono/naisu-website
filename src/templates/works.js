@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import Helmet from "react-helmet"
 import { graphql } from "gatsby"
 import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
@@ -9,6 +8,7 @@ import iconClose from "../images/ic-close.svg"
 import iconArrowDown from "../images/ic-arrow-down.svg"
 import iconArrowUp from "../images/ic-arrow-up.svg"
 import scrollTo from "gatsby-plugin-smoothscroll"
+import SEO from "../components/seo"
 
 export const query = graphql`
   query PageQuery($uid: String) {
@@ -250,7 +250,7 @@ const Works = props => {
 
   return (
     <>
-      <Helmet title={RichText.asText(doc.node.title)} />
+      <SEO title={RichText.asText(doc.node.title) + " - Works"} />
       <Hero
         id="top"
         Tag="div"

@@ -8,6 +8,7 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
+import SEO from "../components/seo"
 
 const Container = styled.div`
   max-width: 992px;
@@ -341,6 +342,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
+      <SEO title={"Hello"} />
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
