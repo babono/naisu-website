@@ -179,7 +179,7 @@ const FormRow = styled.div`
   }
 `
 
-const FormLabel = styled.div`
+const FormLabel = styled.label`
   width: 100px;
   color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
