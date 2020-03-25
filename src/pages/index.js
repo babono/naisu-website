@@ -364,7 +364,7 @@ export default ({ data }) => {
             <HeaderMenuLink href="#works">works</HeaderMenuLink>
             <HeaderMenuLink href="#reach">reach us</HeaderMenuLink>
           </HeaderMenu>
-          <HeaderLogoLink>
+          <HeaderLogoLink href="#home">
             <HeaderLogo>NAISU Studio</HeaderLogo>
           </HeaderLogoLink>
         </HeaderContainer>
