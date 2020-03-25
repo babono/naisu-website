@@ -8,7 +8,7 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
-import SEO from "../components/seo"
+import Helmet from "react-helmet"
 
 const Container = styled.div`
   max-width: 992px;
@@ -169,6 +169,12 @@ const ContactForm = styled.form`
   }
 `
 
+const FormAction = styled.div`
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`
+
 const FormRow = styled.div`
   display: flex;
   margin-bottom: 24px;
@@ -256,13 +262,19 @@ const ButtonSubmit = styled.button`
   &:hover {
     background-color: #e9e9e9;
   }
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `
 
 const WorksWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-left: -4px;
+  margin-right: -4px;
   @media (max-width: 768px) {
-    flex-wrap: wrap;
+    margin-left: -8px;
+    margin-right: -8px;
   }
 `
 
@@ -283,7 +295,9 @@ const WorksInfo = styled.div`
 
 const WorksItem = styled(Link)`
   flex: 0 0 auto;
-  width: 24.375%;
+  width: 25%;
+  padding: 0 4px;
+  margin-bottom: 8px;
   position: relative;
   overflow: hidden;
   &:hover {
@@ -293,7 +307,8 @@ const WorksItem = styled(Link)`
     transform: translateY(0);
   }
   @media (max-width: 768px) {
-    width: 48%;
+    width: 50%;
+    padding: 0 8px;
     margin-bottom: 16px;
   }
 `
@@ -342,7 +357,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <SEO title={"Hello"} />
+      <Helmet title="Hello | Naisu Studio" />
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
@@ -406,9 +421,10 @@ export default ({ data }) => {
                     </ContactInfo>
 
                     <ContactForm
-                      name="contact"
+                      name="contact-us-form"
                       method="post"
                       data-netlify="true"
+                      action="/success"
                     >
                       <FormRow>
                         <FormLabel>Matter</FormLabel>
@@ -494,7 +510,9 @@ export default ({ data }) => {
                           />
                         </FormInput>
                       </FormRow>
-                      <ButtonSubmit type="submit">Submit</ButtonSubmit>
+                      <FormAction>
+                        <ButtonSubmit type="submit">Submit</ButtonSubmit>
+                      </FormAction>
                     </ContactForm>
                   </ContactContainer>
                 </Container>
