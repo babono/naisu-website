@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import { graphql } from "gatsby"
-import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
 import styled, { keyframes } from "styled-components"
 import BackgroundImage from "gatsby-background-image"
@@ -49,7 +48,7 @@ const ActionWrapper = styled.div`
   margin-bottom: 120px;
 `
 
-const ButtonClose = styled(Link)`
+const ButtonClose = styled.a`
   width: 48px;
   height: 48px;
   background-position: center;
@@ -278,7 +277,7 @@ const Works = props => {
           <ButtonScrollDown
             onClick={() => scrollTo("#content")}
           ></ButtonScrollDown>
-          <ButtonClose to="/#works"></ButtonClose>
+          <ButtonClose href="/#works"></ButtonClose>
         </ContainerHero>
       </Hero>
       <Detail id="content">

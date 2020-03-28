@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
 import ReactFullpage from "@fullpage/react-fullpage"
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
@@ -14,10 +14,6 @@ const Container = styled.div`
   max-width: 992px;
   margin: 0 auto;
   padding: 0 16px;
-`
-
-const Section = styled.section`
-  background-color: #2200d2;
 `
 
 const IntroImage = styled.img`
@@ -312,8 +308,6 @@ const WorksItem = styled(Link)`
     margin-bottom: 16px;
   }
 `
-
-const WorksImage = styled.img``
 
 export const query = graphql`
   query HomeQuery {
