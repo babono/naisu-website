@@ -62,6 +62,10 @@ const ButtonClose = styled.a`
   border: none;
   outline: none;
   cursor: pointer;
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
 `
 
 const blinkingDown = keyframes`
