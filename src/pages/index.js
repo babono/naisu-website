@@ -420,6 +420,11 @@ export default ({ data }) => {
                       data-netlify="true"
                       action="/success"
                     >
+                      <input
+                        type="hidden"
+                        name="form-name"
+                        value="contact-us-form"
+                      />
                       <FormRow>
                         <FormLabel>Matter</FormLabel>
                         <FormInput>
