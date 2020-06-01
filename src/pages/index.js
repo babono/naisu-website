@@ -6,6 +6,7 @@ import ReactFullpage from "@fullpage/react-fullpage"
 import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
+import { createGlobalStyle } from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
 import Helmet from "react-helmet"
@@ -14,6 +15,26 @@ const Container = styled.div`
   max-width: 992px;
   margin: 0 auto;
   padding: 0 16px;
+`
+
+const BgStyle = createGlobalStyle`
+  html.fp-enabled body:before {
+    background-image: url(${props => props.bgImageHome});
+  }
+  html.fp-enabled body.fp-viewing-intro:before {
+    background-image: url(${props => props.bgImageIntro});
+  }
+  html.fp-enabled body.fp-viewing-about:before {
+    background-image: url(${props => props.bgImageAbout});
+  }
+`
+
+const BgImage = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
 `
 
 const IntroImage = styled.img`
@@ -312,6 +333,40 @@ const WorksItem = styled(Link)`
 export const query = graphql`
   query HomeQuery {
     prismic {
+      allSectionss {
+        edges {
+          node {
+            background_image_home_section
+            background_image_home_sectionSharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            text_home_section
+            background_image_intro_section
+            background_image_intro_sectionSharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            image_text_intro
+            background_image_about_section
+            background_image_about_sectionSharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            text_about_section
+            _linkType
+          }
+        }
+      }
       allWorkss {
         edges {
           node {
@@ -345,13 +400,23 @@ const RenderWorkList = ({ works }) => {
 
 export default ({ data }) => {
   const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
-  if (!doc) return null
+  const doc2 = data.prismic.allSectionss.edges.slice(0, 1).pop()
+  if (!doc || !doc2) return null
 
   const [contactTopic, setContactTopic] = useState("Business")
 
   return (
     <Layout>
       <Helmet title="Hello | Naisu Studio" />
+      <BgStyle
+        bgImageHome={doc2.node.background_image_home_section.url}
+        bgImageIntro={doc2.node.background_image_intro_section.url}
+        bgImageAbout={doc2.node.background_image_about_section.url}
+      />
+      {/* <BgImage bgImageHome={doc2.node.background_image_home_section.url}
+        src=
+        alt="image introducing"
+      /> */}
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
@@ -363,6 +428,7 @@ export default ({ data }) => {
           </HeaderLogoLink>
         </HeaderContainer>
       </Header>
+
       <ReactFullpage
         //fullpage options
         licenseKey={"9B29255F-E1964991-AD6B9214-8C392F88"}
@@ -375,21 +441,22 @@ export default ({ data }) => {
               <section className="section">
                 <Container>
                   <IntroText1>
-                    Feeling misguided? Take a step closes to us.
+                    {RichText.asText(doc2.node.text_home_section)}
                   </IntroText1>
                 </Container>
               </section>
               <section className="section">
                 <Container>
-                  <IntroImage src={imageIntro} alt="image introducing" />
+                  <IntroImage
+                    src={doc2.node.image_text_intro.url}
+                    alt="image introducing"
+                  />
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroText3>
-                    Bespoke creative and digital solutions with
-                    integrated-yet-unique savvy for anyone from distinguished
-                    global brands to niche local businesses.
+                    {RichText.asText(doc2.node.text_about_section)}
                   </IntroText3>
                 </Container>
               </section>

@@ -653,15 +653,9 @@ html.fp-enabled body:before {
   height: 100%;
   -webkit-transition: all 0.5s linear;
   transition: all 0.5s linear;
-  background-image: url(../images/image-smiley.svg);
 }
 html.fp-enabled body {
   background-color: #2200d8;
-}
-
-html.fp-enabled body.fp-viewing-intro:before,
-html.fp-enabled body.fp-viewing-about:before {
-  opacity: 0.35;
 }
 
 .fp-viewing-works #menu > a:first-child,
