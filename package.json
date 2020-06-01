@@ -7,7 +7,7 @@
   "dependencies": {
     "@fullpage/react-fullpage": "^0.1.17",
     "babel-plugin-styled-components": "^1.10.7",
-    "gatsby": "^2.18.12",
+    "gatsby": "^2.22.15",
     "gatsby-background-image": "^0.10.2",
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-manifest": "^2.2.31",
@@ -47,6 +47,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "resolutions": {
+    "gatsby-source-graphql-universal": "3.3.0"
   },
   "bugs": {
     "url": "https://github.com/gatsbyjs/gatsby/issues"
