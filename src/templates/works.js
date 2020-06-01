@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { graphql } from "gatsby"
 import { RichText } from "prismic-reactjs"
+import Layout from "../components/layout"
 import styled, { keyframes } from "styled-components"
 import BackgroundImage from "gatsby-background-image"
 import iconClose from "../images/ic-close.svg"
@@ -252,7 +253,7 @@ const Works = props => {
   }
 
   return (
-    <>
+    <Layout>
       <SEO title={RichText.asText(doc.node.title) + " - Works"} />
       <Hero
         id="top"
@@ -303,7 +304,7 @@ const Works = props => {
           onClick={() => scrollTo("#top")}
         ></ButtonScrollUp>
       </Detail>
-    </>
+    </Layout>
   )
 }
 
