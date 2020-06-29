@@ -367,6 +367,17 @@ export const query = graphql`
           }
         }
       }
+      allReachs {
+        edges {
+          node {
+            title
+            address
+            email
+            phone
+            _linkType
+          }
+        }
+      }
       allWorkss {
         edges {
           node {
@@ -398,10 +409,19 @@ const RenderWorkList = ({ works }) => {
   ))
 }
 
+const linkResolver = doc => {
+  // Pretty URLs for known types
+  if (doc.type === "blog") return `/post/${doc.uid}`
+  if (doc.type === "page") return `/${doc.uid}`
+  // Fallback for other types, in case new custom types get created
+  return `/doc/${doc.id}`
+}
+
 export default ({ data }) => {
   const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
   const doc2 = data.prismic.allSectionss.edges.slice(0, 1).pop()
-  if (!doc || !doc2) return null
+  const doc3 = data.prismic.allReachs.edges.slice(0, 1).pop()
+  if (!doc || !doc2 || !doc3) return null
 
   const [contactTopic, setContactTopic] = useState("Business")
 
@@ -471,14 +491,21 @@ export default ({ data }) => {
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
-                      <AddressTitle>NAISU</AddressTitle>
+                      <AddressTitle>
+                        {RichText.asText(doc3.node.title)}
+                      </AddressTitle>
                       <AddressDetail>
-                        Jl. Damai Raya No. 22B, <br />
-                        Cipete Utara, Jakarta Selatan <br />
-                        DKI Jakarta, Indonesia
+                        <RichText
+                          render={doc3.node.address}
+                          linkResolver={linkResolver}
+                        />
                       </AddressDetail>
-                      <ContactText>contact@naisu.id</ContactText>
-                      <ContactText>021-2345678910</ContactText>
+                      <ContactText>
+                        {RichText.asText(doc3.node.email)}
+                      </ContactText>
+                      <ContactText>
+                        {RichText.asText(doc3.node.phone)}
+                      </ContactText>
                     </ContactInfo>
 
                     <ContactForm
