@@ -58,12 +58,28 @@ const IntroText1 = styled.div`
   }
 `
 
-const IntroText3 = styled.div`
+const IntroText2 = styled.div`
   color: #ffffff;
   line-height: 52px;
   font-family: Moderat-Bold, sans-serif;
   font-size: 44px;
   text-align: center;
+  margin-top: 48px;
+  @media (max-width: 768px) {
+    font-size: 24px;
+    line-height: 40px;
+  }
+`
+
+const IntroText3 = styled.div`
+  color: #ffffff;
+  line-height: 52px;
+  font-family: Moderat-Regular, sans-serif;
+  font-size: 44px;
+  text-align: center;
+  strong {
+    font-family: Moderat-Bold, sans-serif;
+  }
   @media (max-width: 768px) {
     font-size: 24px;
     line-height: 40px;
@@ -284,6 +300,43 @@ const ButtonSubmit = styled.button`
   }
 `
 
+const Social = styled.div`
+  margin-top: 32px;
+`
+
+const SocialIcon = styled.img`
+  width: 24px;
+  filter: invert(100%);
+  margin: 0;
+`
+
+const SocialItem = styled.a`
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  margin-bottom: 8px;
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const SocialName = styled.div`
+  margin-left: 16px;
+`
+
+const SocialTitle = styled.div`
+  font-size: 16px;
+  font-family: Moderat-Bold, sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+`
+
 const WorksWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -336,33 +389,34 @@ export const query = graphql`
       allSectionss {
         edges {
           node {
-            background_image_home_section
-            background_image_home_sectionSharp {
+            background_image_section_1
+            background_image_section_1Sharp {
               childImageSharp {
                 fluid(maxWidth: 835, quality: 100) {
                   ...GatsbyImageSharpFluid_withWebp
                 }
               }
             }
-            text_home_section
-            background_image_intro_section
-            background_image_intro_sectionSharp {
+            text_section_1
+            background_image_section_2
+            background_image_section_2Sharp {
               childImageSharp {
                 fluid(maxWidth: 835, quality: 100) {
                   ...GatsbyImageSharpFluid_withWebp
                 }
               }
             }
-            image_text_intro
-            background_image_about_section
-            background_image_about_sectionSharp {
+            image_text_section_2
+            text_section_2
+            background_image_section_3
+            background_image_section_3Sharp {
               childImageSharp {
                 fluid(maxWidth: 835, quality: 100) {
                   ...GatsbyImageSharpFluid_withWebp
                 }
               }
             }
-            text_about_section
+            text_section_3
             _linkType
           }
         }
@@ -374,11 +428,23 @@ export const query = graphql`
             address
             email
             phone
+            social {
+              name
+              icon
+              link {
+                _linkType
+                ... on PRISMIC__ExternalLink {
+                  _linkType
+                  url
+                }
+              }
+            }
+
             _linkType
           }
         }
       }
-      allWorkss {
+      allWorkss(sortBy: order_ASC) {
         edges {
           node {
             title
@@ -429,11 +495,11 @@ export default ({ data }) => {
     <Layout>
       <Helmet title="Hello | Naisu Studio" />
       <BgStyle
-        bgImageHome={doc2.node.background_image_home_section.url}
-        bgImageIntro={doc2.node.background_image_intro_section.url}
-        bgImageAbout={doc2.node.background_image_about_section.url}
+        bgImageHome={doc2.node.background_image_section_1.url}
+        bgImageIntro={doc2.node.background_image_section_2.url}
+        bgImageAbout={doc2.node.background_image_section_3.url}
       />
-      {/* <BgImage bgImageHome={doc2.node.background_image_home_section.url}
+      {/* <BgImage bgImageHome={doc2.node.background_image_section_1.url}
         src=
         alt="image introducing"
       /> */}
@@ -461,22 +527,25 @@ export default ({ data }) => {
               <section className="section">
                 <Container>
                   <IntroText1>
-                    {RichText.asText(doc2.node.text_home_section)}
+                    {RichText.asText(doc2.node.text_section_1)}
                   </IntroText1>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroImage
-                    src={doc2.node.image_text_intro.url}
+                    src={doc2.node.image_text_section_2.url}
                     alt="image introducing"
                   />
+                  <IntroText2>
+                    {RichText.asText(doc2.node.text_section_2)}
+                  </IntroText2>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroText3>
-                    {RichText.asText(doc2.node.text_about_section)}
+                    {RichText.render(doc2.node.text_section_3)}
                   </IntroText3>
                 </Container>
               </section>
@@ -506,6 +575,17 @@ export default ({ data }) => {
                       <ContactText>
                         {RichText.asText(doc3.node.phone)}
                       </ContactText>
+                      <Social>
+                        <SocialTitle>Our Social</SocialTitle>
+                        {doc3.node.social.map(social => (
+                          <SocialItem href={social.link.url}>
+                            <SocialIcon src={social.icon.url} />
+                            <SocialName>
+                              {RichText.asText(social.name)}
+                            </SocialName>
+                          </SocialItem>
+                        ))}
+                      </Social>
                     </ContactInfo>
 
                     <ContactForm
@@ -545,18 +625,6 @@ export default ({ data }) => {
                               onClick={() => setContactTopic("Jobs")}
                             />
                             <label htmlFor="jobs">Jobs &amp; Internship</label>
-                          </RadioButton>
-                          <RadioButton>
-                            <input
-                              type="radio"
-                              id="other"
-                              name="contactTopic"
-                              value="Others"
-                              checked={contactTopic === "Others"}
-                              onChange={() => {}}
-                              onClick={() => setContactTopic("Others")}
-                            />
-                            <label htmlFor="other">Others</label>
                           </RadioButton>
                         </FormInput>
                       </FormRow>
