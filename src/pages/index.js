@@ -14,7 +14,7 @@ import Helmet from "react-helmet"
 const Container = styled.div`
   max-width: 992px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 60px 16px 32px;
 `
 
 const BgStyle = createGlobalStyle`
@@ -73,16 +73,15 @@ const IntroText2 = styled.div`
 
 const IntroText3 = styled.div`
   color: #ffffff;
-  line-height: 52px;
-  font-family: Moderat-Regular, sans-serif;
-  font-size: 44px;
+  line-height: 1.4;
+  font-family: Moderat-Bold, sans-serif;
+  font-size: 26px;
   text-align: center;
   strong {
-    font-family: Moderat-Bold, sans-serif;
+    color: #eae441;
   }
   @media (max-width: 768px) {
-    font-size: 24px;
-    line-height: 40px;
+    font-size: 18px;
   }
 `
 
@@ -191,7 +190,7 @@ const ContactInfo = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     margin-bottom: 16px;
-    padding-top: 80px;
+    padding-top: 20px;
   }
 `
 
