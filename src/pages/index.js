@@ -82,6 +82,7 @@ const IntroText3 = styled.div`
   }
   em{
     color: #eae441;
+    font-style: normal;
   }
   @media (max-width: 768px) {
     font-size: 18px;
