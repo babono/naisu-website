@@ -14,6 +14,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: Moderat-Light;
+  font-weight: 300;
+  font-style: normal;
+  src: url("../fonts/Moderat-Light.otf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Moderat-Black;
+  font-weight: 900;
+  font-style: normal;
+  src: url("../fonts/Moderat-Black.otf");
+  font-display: swap;
+}
+
 html {
   font-family: Moderat-Regular, sans-serif;
   -ms-text-size-adjust: 100%;

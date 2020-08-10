@@ -74,20 +74,21 @@ const IntroText2 = styled.div`
 const IntroText3 = styled.div`
   color: #ffffff;
   line-height: 1.4;
-  font-family: Moderat-Bold, sans-serif;
+  font-family: Moderat-Light, sans-serif;
   font-size: 26px;
   text-align: center;
   strong {
-    font-size: 28px;
+    font-size: 26px;
+    font-family: Moderat-Black, sans-serif;
   }
   em{
     color: #eae441;
-    font-style: normal;
+    font-family: Moderat-Black, sans-serif;
   }
   @media (max-width: 768px) {
     font-size: 18px;
     strong{
-      font-size: 20px;
+      font-size: 18px;
     }
   }
 `
