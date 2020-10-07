@@ -1,23 +1,40 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-
+import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
 import ReactFullpage from "@fullpage/react-fullpage"
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
+import { createGlobalStyle } from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
+import Helmet from "react-helmet"
 
 const Container = styled.div`
   max-width: 992px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 60px 16px 32px;
 `
 
-const Section = styled.section`
-  background-color: #2200d2;
+const BgStyle = createGlobalStyle`
+  html.fp-enabled body:before {
+    background-image: url(${props => props.bgImageHome});
+  }
+  html.fp-enabled body.fp-viewing-intro:before {
+    background-image: url(${props => props.bgImageIntro});
+  }
+  html.fp-enabled body.fp-viewing-about:before {
+    background-image: url(${props => props.bgImageAbout});
+  }
+`
+
+const BgImage = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
 `
 
 const IntroImage = styled.img`
@@ -34,14 +51,47 @@ const IntroText1 = styled.div`
   font-size: 28px;
   text-align: center;
   padding-top: 85vh;
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 24px;
+    padding-top: 70vh;
+  }
 `
 
-const IntroText3 = styled.div`
+const IntroText2 = styled.div`
   color: #ffffff;
   line-height: 52px;
   font-family: Moderat-Bold, sans-serif;
   font-size: 44px;
   text-align: center;
+  margin-top: 48px;
+  @media (max-width: 768px) {
+    font-size: 24px;
+    line-height: 40px;
+  }
+`
+
+const IntroText3 = styled.div`
+  color: #ffffff;
+  line-height: 1.4;
+  font-family: Moderat-Light, sans-serif;
+  font-size: 26px;
+  text-align: center;
+  strong {
+    font-size: 26px;
+    font-family: Moderat-Black, sans-serif;
+  }
+  em{
+    color: #eae441;
+    font-family: Moderat-Black, sans-serif;
+    font-style: normal;
+  }
+  @media (max-width: 768px) {
+    font-size: 18px;
+    strong{
+      font-size: 18px;
+    }
+  }
 `
 
 const Header = styled.header`
@@ -56,6 +106,9 @@ const HeaderContainer = styled.div`
   max-width: 97%;
   padding: 40px 48px;
   position: relative;
+  @media (max-width: 768px) {
+    padding: 16px 8px;
+  }
 `
 
 const HeaderMenu = styled.div`
@@ -63,17 +116,21 @@ const HeaderMenu = styled.div`
   justify-content: space-between;
 `
 
-const HeaderMenuLink = styled.div`
+const HeaderMenuLink = styled.a`
+  text-decoration: none;
   font-family: Moderat-Regular, sans-serif;
   font-size: 16px;
   color: ${props =>
-    props.active ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.5)"};
+    props.active ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.75)"};
   text-transform: uppercase;
   letter-spacing: 3px;
   transition: color 0.5s linear;
   cursor: pointer;
   &:hover {
     color: rgba(255, 255, 255, 1);
+  }
+  @media (max-width: 768px) {
+    font-size: 13px;
   }
 `
 
@@ -94,6 +151,11 @@ const HeaderLogoLink = styled.a`
   background-position: center;
   -webkit-transition: background 0.5s linear;
   transition: background 0.5s linear;
+  @media (max-width: 768px) {
+    width: 84px;
+    margin-left: -42px;
+    top: 8px;
+  }
 `
 
 const AddressTitle = styled.div`
@@ -101,6 +163,9 @@ const AddressTitle = styled.div`
   font-family: Moderat-Bold, sans-serif;
   color: #ffffff;
   letter-spacing: 0.2em;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `
 
 const AddressDetail = styled.div`
@@ -108,50 +173,90 @@ const AddressDetail = styled.div`
   margin: 24px 0;
   color: #ffffff;
   letter-spacing: 0.1em;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `
 
 const ContactText = styled.div`
   font-size: 16px;
   color: #ffffff;
   letter-spacing: 0.1em;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `
 
 const ContactContainer = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `
 
 const ContactInfo = styled.div`
   width: 40%;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 16px;
+    padding-top: 20px;
+  }
 `
 
-const ContactForm = styled.div`
+const ContactForm = styled.form`
   width: 60%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`
+
+const FormAction = styled.div`
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `
 
 const FormRow = styled.div`
   display: flex;
   margin-bottom: 24px;
   align-items: ${props => (props.top ? "flex-start" : "center")};
+  @media (max-width: 768px) {
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
 `
 
-const FormLabel = styled.div`
+const FormLabel = styled.label`
   width: 100px;
   color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
   letter-spacing: 0.1em;
   font-family: Moderat-Bold, sans-serif;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 `
 
 const FormInput = styled.div`
   display: flex;
   align-items: center;
   flex: 1 1 auto;
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 `
 
 const RadioButton = styled.div`
   display: flex;
   align-items: center;
   margin-right: 32px;
+  @media (max-width: 768px) {
+    width: 50%;
+    margin-right: 0;
+    margin-bottom: 16px;
+  }
 `
 
 const InputText = styled.input`
@@ -178,6 +283,9 @@ const TextArea = styled.textarea`
   &:focus {
     outline: auto 2px #fff;
   }
+  @media (max-width: 768px) {
+    height: 80px;
+  }
 `
 
 const ButtonSubmit = styled.button`
@@ -195,31 +303,79 @@ const ButtonSubmit = styled.button`
   &:hover {
     background-color: #e9e9e9;
   }
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+`
+
+const Social = styled.div`
+  margin-top: 32px;
+`
+
+const SocialIcon = styled.img`
+  width: 24px;
+  filter: invert(100%);
+  margin: 0;
+`
+
+const SocialItem = styled.a`
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+  margin-bottom: 8px;
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const SocialName = styled.div`
+  margin-left: 16px;
+`
+
+const SocialTitle = styled.div`
+  font-size: 16px;
+  font-family: Moderat-Bold, sans-serif;
+  color: #ffffff;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `
 
 const WorksWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-left: -4px;
+  margin-right: -4px;
+  @media (max-width: 768px) {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
 `
 
 const WorksInfo = styled.div`
   position: absolute;
-  top: 1px;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
   transform: translateY(100%);
-  background-color: #ffffff;
-  color: #2200d2;
+  background-color: #2200d2;
+  color: #ffffff;
   transition: all 0.2s ease-in-out;
   font-family: Moderat-Bold, sans-serif;
 `
 
-const WorksItem = styled.div`
+const WorksItem = styled(Link)`
   flex: 0 0 auto;
-  width: 24.375%;
+  width: 25%;
+  padding: 0 4px;
+  margin-bottom: 8px;
   position: relative;
   overflow: hidden;
   &:hover {
@@ -228,128 +384,229 @@ const WorksItem = styled.div`
   &:hover ${WorksInfo} {
     transform: translateY(0);
   }
+  @media (max-width: 768px) {
+    width: 50%;
+    padding: 0 8px;
+    margin-bottom: 16px;
+  }
 `
 
-const WorksImage = styled.img``
+export const query = graphql`
+  query HomeQuery {
+    prismic {
+      allSectionss {
+        edges {
+          node {
+            background_image_section_1
+            background_image_section_1Sharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            text_section_1
+            background_image_section_2
+            background_image_section_2Sharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            image_text_section_2
+            text_section_2
+            background_image_section_3
+            background_image_section_3Sharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+            text_section_3
+            _linkType
+          }
+        }
+      }
+      allReachs {
+        edges {
+          node {
+            title
+            address
+            email
+            phone
+            social {
+              name
+              icon
+              link {
+                _linkType
+                ... on PRISMIC__ExternalLink {
+                  _linkType
+                  url
+                }
+              }
+            }
 
-const IndexPage = () => {
-  const [contactTopic, setContactTopic] = useState("Business")
-
-  const data = useStaticQuery(graphql`
-    query {
-      imageAccenture: file(relativePath: { eq: "image-banner-accenture.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
+            _linkType
           }
         }
       }
-      imageHanamasa: file(relativePath: { eq: "image-banner-hanamasa.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-      imageMandiriUpdate: file(
-        relativePath: { eq: "image-banner-mandiri-update.jpg" }
-      ) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-      imagePronto: file(relativePath: { eq: "image-banner-pronto.jpg" }) {
-        childImageSharp {
-          fluid(maxWidth: 400) {
-            ...GatsbyImageSharpFluid
+      allWorkss(sortBy: order_ASC) {
+        edges {
+          node {
+            title
+            _meta {
+              uid
+            }
+            image_thumbnail
+            image_thumbnailSharp {
+              childImageSharp {
+                fluid(maxWidth: 835, quality: 100) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
           }
         }
       }
     }
-  `)
+  }
+`
+
+const RenderWorkList = ({ works }) => {
+  return works.map(item => (
+    <WorksItem key={item.node._meta.uid} to={"/w/" + item.node._meta.uid}>
+      <Img fluid={item.node.image_thumbnailSharp.childImageSharp.fluid} />
+      <WorksInfo>{RichText.asText(item.node.title)}</WorksInfo>
+    </WorksItem>
+  ))
+}
+
+const linkResolver = doc => {
+  // Pretty URLs for known types
+  if (doc.type === "blog") return `/post/${doc.uid}`
+  if (doc.type === "page") return `/${doc.uid}`
+  // Fallback for other types, in case new custom types get created
+  return `/doc/${doc.id}`
+}
+
+export default ({ data }) => {
+  const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
+  const doc2 = data.prismic.allSectionss.edges.slice(0, 1).pop()
+  const doc3 = data.prismic.allReachs.edges.slice(0, 1).pop()
+  if (!doc || !doc2 || !doc3) return null
+
+  const [contactTopic, setContactTopic] = useState("Business")
 
   return (
     <Layout>
-      <SEO title="Naisu Studio The New Future" />
+      <Helmet title="Hello | Naisu Studio" />
+      <BgStyle
+        bgImageHome={doc2.node.background_image_section_1.url}
+        bgImageIntro={doc2.node.background_image_section_2.url}
+        bgImageAbout={doc2.node.background_image_section_3.url}
+      />
+      {/* <BgImage bgImageHome={doc2.node.background_image_section_1.url}
+        src=
+        alt="image introducing"
+      /> */}
       <Header>
         <HeaderContainer>
-          <HeaderMenu>
-            <HeaderMenuLink>works</HeaderMenuLink>
-            <HeaderMenuLink>reach us</HeaderMenuLink>
+          <HeaderMenu id="menu">
+            <HeaderMenuLink href="#works">works</HeaderMenuLink>
+            <HeaderMenuLink href="#reach">reach us</HeaderMenuLink>
           </HeaderMenu>
-          <HeaderLogoLink>
+          <HeaderLogoLink href="#home">
             <HeaderLogo>NAISU Studio</HeaderLogo>
           </HeaderLogoLink>
         </HeaderContainer>
       </Header>
+
       <ReactFullpage
         //fullpage options
-        licenseKey={"YOUR_KEY_HERE"}
+        licenseKey={"9B29255F-E1964991-AD6B9214-8C392F88"}
         scrollingSpeed={1000} /* Options here */
+        scrollOverflow={true}
+        anchors={["home", "intro", "about", "works", "reach"]}
         render={({ state, fullpageApi }) => {
           return (
             <ReactFullpage.Wrapper>
-              <section className="section" id="intro-1">
+              <section className="section">
                 <Container>
                   <IntroText1>
-                    Feeling misguided? Take a step closes to us.
+                    {RichText.asText(doc2.node.text_section_1)}
                   </IntroText1>
                 </Container>
               </section>
-              <section className="section" id="intro-2">
+              <section className="section">
                 <Container>
-                  <IntroImage src={imageIntro} alt="image introducing" />
+                  <IntroImage
+                    src={doc2.node.image_text_section_2.url}
+                    alt="image introducing"
+                  />
+                  <IntroText2>
+                    {RichText.asText(doc2.node.text_section_2)}
+                  </IntroText2>
                 </Container>
               </section>
-              <section className="section" id="intro-3">
+              <section className="section">
                 <Container>
                   <IntroText3>
-                    Bespoke creative and digital solutions with
-                    integrated-yet-unique savvy for anyone from distinguished
-                    global brands to niche local businesses.
+                    {RichText.render(doc2.node.text_section_3)}
                   </IntroText3>
                 </Container>
               </section>
-              <section className="section" id="works">
+              <section className="section bgBlue">
                 <Container>
                   <WorksWrapper>
-                    <WorksItem>
-                      <Img fluid={data.imageAccenture.childImageSharp.fluid} />
-                      <WorksInfo>Accenture</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img fluid={data.imageHanamasa.childImageSharp.fluid} />
-                      <WorksInfo>Hanamasa</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img
-                        fluid={data.imageMandiriUpdate.childImageSharp.fluid}
-                      />
-                      <WorksInfo>BUMN</WorksInfo>
-                    </WorksItem>
-                    <WorksItem>
-                      <Img fluid={data.imagePronto.childImageSharp.fluid} />
-                      <WorksInfo>Pronto</WorksInfo>
-                    </WorksItem>
+                    <RenderWorkList works={data.prismic.allWorkss.edges} />
                   </WorksWrapper>
                 </Container>
               </section>
-              <section className="section" id="contact">
+              <section className="section bgBlue fp-auto-height-responsive">
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
-                      <AddressTitle>NAISU</AddressTitle>
+                      <AddressTitle>
+                        {RichText.asText(doc3.node.title)}
+                      </AddressTitle>
                       <AddressDetail>
-                        Jl. Damai Raya No. 22B, <br />
-                        Cipete Utara, Jakarta Selatan <br />
-                        DKI Jakarta, Indonesia
+                        <RichText
+                          render={doc3.node.address}
+                          linkResolver={linkResolver}
+                        />
                       </AddressDetail>
-                      <ContactText>contact@naisu.id</ContactText>
-                      <ContactText>021-2345678910</ContactText>
+                      <ContactText>
+                        {RichText.asText(doc3.node.email)}
+                      </ContactText>
+                      <ContactText>
+                        {RichText.asText(doc3.node.phone)}
+                      </ContactText>
+                      <Social>
+                        <SocialTitle>Our Social</SocialTitle>
+                        {doc3.node.social.map(social => (
+                          <SocialItem href={social.link.url}>
+                            <SocialIcon src={social.icon.url} />
+                            <SocialName>
+                              {RichText.asText(social.name)}
+                            </SocialName>
+                          </SocialItem>
+                        ))}
+                      </Social>
                     </ContactInfo>
-                    <ContactForm>
+
+                    <ContactForm
+                      name="contact-us-form"
+                      method="post"
+                      data-netlify="true"
+                      action="/success"
+                    >
+                      <input
+                        type="hidden"
+                        name="form-name"
+                        value="contact-us-form"
+                      />
                       <FormRow>
                         <FormLabel>Matter</FormLabel>
                         <FormInput>
@@ -360,9 +617,10 @@ const IndexPage = () => {
                               name="contactTopic"
                               value="Business"
                               checked={contactTopic === "Business"}
+                              onChange={() => {}}
                               onClick={() => setContactTopic("Business")}
                             />
-                            <label for="business">Business</label>
+                            <label htmlFor="business">Business</label>
                           </RadioButton>
                           <RadioButton>
                             <input
@@ -371,48 +629,59 @@ const IndexPage = () => {
                               name="contactTopic"
                               value="Jobs"
                               checked={contactTopic === "Jobs"}
+                              onChange={() => {}}
                               onClick={() => setContactTopic("Jobs")}
                             />
-                            <label for="jobs">Jobs &amp; Internship</label>
-                          </RadioButton>
-                          <RadioButton>
-                            <input
-                              type="radio"
-                              id="other"
-                              name="contactTopic"
-                              value="Others"
-                              checked={contactTopic === "Others"}
-                              onClick={() => setContactTopic("Others")}
-                            />
-                            <label for="other">Others</label>
+                            <label htmlFor="jobs">Jobs &amp; Internship</label>
                           </RadioButton>
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel htmlFor="name">Name</FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="John Doe" />
+                          <InputText
+                            id="name"
+                            type="text"
+                            placeholder="John Doe"
+                            name="name"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel htmlFor="email">Email</FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="john@email.com" />
+                          <InputText
+                            id="email"
+                            type="text"
+                            placeholder="john@email.com"
+                            name="email"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow>
-                        <FormLabel>Phone </FormLabel>
+                        <FormLabel htmlFor="phone">Phone </FormLabel>
                         <FormInput>
-                          <InputText type="text" placeholder="081234567890" />
+                          <InputText
+                            id="phone"
+                            type="text"
+                            placeholder="081234567890"
+                            name="phone"
+                          />
                         </FormInput>
                       </FormRow>
                       <FormRow top>
-                        <FormLabel>Message </FormLabel>
+                        <FormLabel htmlFor="message">Message </FormLabel>
                         <FormInput>
-                          <TextArea placeholder="Hello, Naisu!" />
+                          <TextArea
+                            id="message"
+                            placeholder="Hello, Naisu!"
+                            name="message"
+                          />
                         </FormInput>
                       </FormRow>
-                      <ButtonSubmit type="submit">Submit</ButtonSubmit>
+                      <FormAction>
+                        <ButtonSubmit type="submit">Submit</ButtonSubmit>
+                      </FormAction>
                     </ContactForm>
                   </ContactContainer>
                 </Container>
@@ -424,5 +693,3 @@ const IndexPage = () => {
     </Layout>
   )
 }
-
-export default IndexPage

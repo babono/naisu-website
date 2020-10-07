@@ -57,15 +57,16 @@ const ButtonWrapper = styled.div`
   text-align: center;
 `
 
-const NotFoundPage = () => (
+const Status = () => (
   <Layout>
-    <Helmet title="404 Not Found" />
+    <Helmet title="Deployment Status | Naisu Studio" />
     <Section>
       <Container>
-        <Title>NOT FOUND</Title>
-        <Subtitle>
-          You just hit a route that doesn&#39;t exist... the sadness.
-        </Subtitle>
+        <Title>Deployment Status</Title>
+        <Subtitle>Production Environment.</Subtitle>
+        <a href="https://app.netlify.com/sites/naisu/deploys" target="_blank">
+          <img src="https://api.netlify.com/api/v1/badges/615e7c38-42a0-4cbe-a13a-4cd64df5bfd4/deploy-status" />
+        </a>
         <ButtonWrapper>
           <Button to="/">Back to Home</Button>
         </ButtonWrapper>
@@ -74,4 +75,4 @@ const NotFoundPage = () => (
   </Layout>
 )
 
-export default NotFoundPage
+export default Status

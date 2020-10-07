@@ -57,15 +57,13 @@ const ButtonWrapper = styled.div`
   text-align: center;
 `
 
-const NotFoundPage = () => (
+const SuccessPage = () => (
   <Layout>
-    <Helmet title="404 Not Found" />
+    <Helmet title="Thank You for Contacting Us | Naisu Studio" />
     <Section>
       <Container>
-        <Title>NOT FOUND</Title>
-        <Subtitle>
-          You just hit a route that doesn&#39;t exist... the sadness.
-        </Subtitle>
+        <Title>Thank You for Your Submission</Title>
+        <Subtitle>We will contact you shortly.</Subtitle>
         <ButtonWrapper>
           <Button to="/">Back to Home</Button>
         </ButtonWrapper>
@@ -74,4 +72,4 @@ const NotFoundPage = () => (
   </Layout>
 )
 
-export default NotFoundPage
+export default SuccessPage
