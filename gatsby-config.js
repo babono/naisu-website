@@ -30,6 +30,19 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-facebook-pixel`,
+      options: {
+        pixelId: "386207062795039",
+      },
+    },
+    {
+      resolve: "gatsby-plugin-google-tagmanager",
+      options: {
+        id: "G-CYK48Y06FH",
+        includeInDevelopment: false,        
+      },
+    },
+    {
       resolve: "gatsby-source-prismic-graphql",
       options: {
         repositoryName: "babono", // (REQUIRED, replace with your own)
