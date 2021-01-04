@@ -30,6 +30,38 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: Moderat-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Moderat-Bold.otf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Merriweather-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Merriweather-Bold.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Karla-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Karla.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Karla-Regular;
+  font-weight: 400;
+  font-style: normal;
+  src: url("../fonts/Karla.ttf");
+  font-display: swap;
+}
+
 html {
   font-family: Moderat-Regular, sans-serif;
   -ms-text-size-adjust: 100%;
