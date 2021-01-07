@@ -2,10 +2,15 @@ import React from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Helmet from "react-helmet"
+import { graphql } from "gatsby"
 import styled, { css, keyframes } from 'styled-components'
 import iconBack from "../images/ic-back.svg"
 import iconMail from "../images/ic-mail.svg"
 import iconPlayCircle from "../images/ic-play-circle.svg"
+import imageTornado from "../images/image-tornado.svg"
+import Img from "gatsby-image"
+import imageThumbTiktok from "../images/image-thumb-tiktok.jpeg"
+import tiktokVideo from "../videos/video-tiktok.mp4"
 import imageEllipse from "../images/image-ellipse.png"
 import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
@@ -14,6 +19,17 @@ const gradientAnimation = keyframes`
 	0%{background-position:0% 0%}
 	50%{background-position:100% 100%}
 	100%{background-position:0% 0%}
+`
+
+const tornadoAnimation = keyframes`
+	0%
+	100%,
+	 {
+		transform: rotateY(0) translate(0,0) translateZ(6px);
+	}
+	50% {
+		transform: rotateY(8deg) translate(-2px,-2px) translateZ(10px);
+	}
 `
 
 const Container = styled.div`
@@ -55,10 +71,26 @@ const Hero = styled.div`
 	padding: 110px 0;
 	margin-top: 64px;
 	animation: ${gradientAnimation} 5s ease infinite;
+	position: relative;
+	overflow: hidden;
+	&:after {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-image: url(${imageTornado});
+		background-repeat: no-repeat;
+		background-position: 90% center;
+		transform-style: preserve-3d;
+		top: 0;
+		left: 0;
+		animation: ${tornadoAnimation} 5s ease infinite;
+	}
 `
 
 const HeroAction = styled.div`
 	display: flex;
+	margin-top: 24px;
 `
 
 const Nav = styled.nav`
@@ -67,7 +99,7 @@ const Nav = styled.nav`
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 1;
+	z-index: 100;
 	box-shadow: inset 0 -1px 0 rgba(230, 230, 230, 1);
 `
 
@@ -137,6 +169,7 @@ const Subtitle = styled.h2`
 	font-family: Karla-Bold, sans-serif;
   color: #000000;
 	font-size: 24px;
+	margin: 0;
 	${props => props.violet && css`
     color: #c10899;
 	`}
@@ -146,6 +179,7 @@ const Text = styled.p`
 	font-family: Karla-Regular, sans-serif;
   color: #000000;
 	font-size: 16px;
+	margin: 0;
 	${props => props.white && css`
     color: #ffffff;
   `}
@@ -172,11 +206,16 @@ const Button = styled.button`
 const ListItem = styled.div`
 	display:flex;
 	align-items: center;
+	margin-bottom: 24px;
+	&:last-child{
+		margin-bottom: 0;
+	}
 `
 
 const ListImage = styled.div`	
 	width: 20%;
 	padding-right: 24px;
+	line-height: 0;
 `
 
 const ListDescription = styled.div`
@@ -185,7 +224,7 @@ const ListDescription = styled.div`
 
 const Row = styled.div`
 	display: flex;
-	margin: 0 -16px;
+	margin: 32px -16px 0;
 `
 
 const ColumnItem = styled.div`
@@ -195,13 +234,115 @@ const ColumnItem = styled.div`
 `
 
 const ColumnImage = styled.div`
-	
+	line-height: 0;
+	margin-bottom: 16px;
 `
 
+const Works = styled.div`	
+`
 
+const WorksFilter = styled.div`	
+`
 
+const WorksList = styled.div`	
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 -6px;
+`
 
-const Tiktok = () => (
+const WorksGrid = styled.div`	
+	flex: 0 0 auto;
+	width: 16.6667%;
+	padding: 6px;
+`
+
+const WorksItem = styled.div`
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	&:after{
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		background-color: rgba(0,0,0,0.5);
+		width: 100%;
+		height: 100%;
+		transition: background-color .3s ease;
+	}
+	&:hover{
+		&:after{
+			background-color: rgba(0,0,0,0);
+		}
+		i {
+			transform: translate(-21px,350%);
+		}
+		video {
+			display: block;
+		}
+	}	
+`
+
+const WorksThumb = styled.div`	
+`
+
+const WorksVideo = styled.video`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+	z-index: 1;	
+`
+
+const PlayIcon = styled.i`
+	position: absolute;	
+	top: 50%;
+	left: 50%;
+	width: 42px;
+	height: 42px;
+	background-image: url(${iconPlayCircle});
+	background-size: contain;
+	transform: translate(-21px,-21px);
+	transition: transform .3s ease;
+	z-index: 1;
+`
+
+export const query = graphql`
+  query MyQuery {
+    file(relativePath: { eq: "image-thumb-tiktok.jpeg" }) {
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid
+        }
+      }
+    }
+  }
+`
+
+const LoopWorks = ({ file }) => {
+	var rows = [];
+	for (var i = 0; i < 12; i++) {
+			rows.push(<WorksGrid key={i}>
+				<WorksItem>
+					<WorksThumb>
+						<Img
+								fluid={file}
+								alt="Thumbnail asoy"
+							/>
+						<WorksVideo autoPlay muted loop playsInline>
+							<source src={tiktokVideo} type="video/mp4" />
+						</WorksVideo>
+					</WorksThumb>
+					<PlayIcon />
+				</WorksItem>
+			</WorksGrid>);
+	}
+  return rows;
+}
+
+const Tiktok = ({ data }) => (
   <Layout>
     <Helmet title="Supercharge your TikTok with Us | Naisu Studio" />
 		<Nav>
@@ -272,34 +413,20 @@ const Tiktok = () => (
 		<Section>
 			<Container>
 				<Title>Our Works</Title>
-				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
-					<ListDescription>
-						<Subtitle violet>Grow Your Brand and Be a Winner in TikTok</Subtitle>
-						<Text>37 million monthly active users (MAU) with 18 million users increase from Q4 2019 until Q1 2020.</Text>
-					</ListDescription>
-				</ListItem>
-				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
-					<ListDescription>
-						<Subtitle violet>TikTok is Fueled by Young Energy in Indonesia</Subtitle>
-						<Text>84% of TikTok users in Indonesia are under 25 years old.</Text>
-					</ListDescription>
-				</ListItem>
-				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
-					<ListDescription>
-						<Subtitle violet>Significantly Improve Your Brand Image through TikTok</Subtitle>
-						<Text>13% of brand owners changed their brand image to be more open, modern, unique, and creative-looking</Text>
-					</ListDescription>
-				</ListItem>
+				<Works>
+					<WorksFilter>
+
+					</WorksFilter>
+					<WorksList>
+						<LoopWorks file={data.file.childImageSharp.fluid}/>						
+					</WorksList>
+				</Works>
 			</Container>
 		</Section>
 		<Form>
 			<Container>
-				<Title>Ready to Make Your First Step with TikTok?</Title>
-				<Subtitle>We offer a free consultation to find out what your brand needs. Contact us now!</Subtitle>
-
+				<Title white>Ready to Make Your First Step with TikTok?</Title>
+				<Text white>We offer a free consultation to find out what your brand needs. Contact us now!</Text>				
 			</Container>
 		</Form>
 		<Footer>
