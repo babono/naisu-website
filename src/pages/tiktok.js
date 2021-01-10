@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Helmet from "react-helmet"
@@ -9,6 +9,7 @@ import iconMail from "../images/ic-mail.svg"
 import iconPlayCircle from "../images/ic-play-circle.svg"
 import imageTornado from "../images/image-tornado.svg"
 import Img from "gatsby-image"
+import scrollTo from 'gatsby-plugin-smoothscroll';
 import imageThumbTiktok from "../images/image-thumb-tiktok.jpeg"
 import tiktokVideo from "../videos/video-tiktok.mp4"
 import imageEllipse from "../images/image-ellipse.png"
@@ -35,7 +36,9 @@ const tornadoAnimation = keyframes`
 const Container = styled.div`
   max-width: 992px;  
   margin: 0 auto;
-  padding: 0 16px;    
+	padding: 0 16px;  
+	position: relative;
+	z-index: 1;  
 `
 
 const Section = styled.section`
@@ -48,10 +51,90 @@ const Section = styled.section`
 	`}
 `
 
-const Form = styled.div`
-	background: linear-gradient(135deg, #0918A4 0%, #9E2183 100%);
-	padding: 60px 0;
+const FormContent = styled.div`
+	margin-top: 48px;
+	max-width: 100%;
+	width: 328px;
 `
+
+const FormField = styled.div`
+	position: relative;
+	margin-bottom: 24px;
+`
+
+const FormInput = styled.input`
+	border: none;
+	border-bottom: 1px solid #ffffff;
+	transition: all 0.2s ease-in-out;
+	touch-action: manipulation;
+	-webkit-appearance: none;
+	outline: none;
+	font-size: 16px;
+	font-family: Karla-Regular, sans-serif;
+	color: #ffffff;
+	background: none;
+	width: 100%;
+	&::-webkit-input-placeholder {
+		opacity: 0;
+		transition: inherit;
+	}
+	&:focus{
+		&::-webkit-input-placeholder {
+			opacity: 1;
+		}
+	}
+	&:not(:placeholder-shown) + label,
+	&:focus + label {
+		font-size: 11px;
+		bottom: 75%;
+	}
+`
+
+const FormTextArea = styled.textarea`
+	border: none;
+	border-bottom: 1px solid #ffffff;
+	transition: all 0.2s ease-in-out;
+	touch-action: manipulation;
+	-webkit-appearance: none;
+	outline: none;
+	font-size: 16px;
+	font-family: Karla-Regular, sans-serif;
+	color: #ffffff;
+	background: none;
+	width: 100%;
+	resize: none;
+	padding: 1px 2px;
+	&::-webkit-input-placeholder {
+		opacity: 0;
+		transition: inherit;
+	}
+	&:focus{
+		&::-webkit-input-placeholder {
+			opacity: 1;
+		}
+	}
+	&:not(:placeholder-shown) + label,
+	&:focus + label {
+		font-size: 11px;
+		top: -16px;
+	}
+`
+
+const FormLabel = styled.label`
+	color: #ffffff;
+	position: absolute;
+	left: 2px;
+	bottom: 2px;
+	font-family: Karla-Regular, sans-serif;
+	transition: all 0.2s ease-in-out;
+	touch-action: manipulation;
+	font-size: 16px;
+	${props => props.textarea && css`
+		bottom: initial;
+		top: 0;
+	`}
+`
+
 
 const Footer = styled.footer`
 	padding: 16px 0;
@@ -85,6 +168,34 @@ const Hero = styled.div`
 		top: 0;
 		left: 0;
 		animation: ${tornadoAnimation} 5s ease infinite;
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
+`
+
+const Form = styled.section`
+	background: linear-gradient(135deg, #0918A4 0%, #9E2183 100%);
+	background-size: 120% 120%;
+	animation: ${gradientAnimation} 5s ease infinite;
+	padding: 60px 0;
+	position: relative;
+	&:after {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-image: url(${imageTornado});
+		background-repeat: no-repeat;
+		background-position: 90% center;
+		background-size: contain;
+		transform-style: preserve-3d;
+		top: 0;
+		left: 0;
+		animation: ${tornadoAnimation} 5s ease infinite;
+		@media (max-width: 768px) {
+			display: none;
+		}
 	}
 `
 
@@ -129,6 +240,11 @@ const ButtonBack = styled(Link)`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: all 0.2s ease-in-out;
+	&:hover,
+	&:active{
+		transform: translateX(-3px);
+	}
 `
 
 const ButtonBackIcon = styled.i`
@@ -138,12 +254,22 @@ const ButtonBackIcon = styled.i`
 	background-size: contain;
 `
 
-const ButtonMail = styled(Link)`
+const ButtonMail = styled.button`
 	width: 24px;
 	height: 24px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: all 0.2s ease-in-out;
+	background:none;
+	border: none;
+	padding: 0;
+	outline: none;
+	cursor: pointer;
+	&:hover,
+	&:active{
+		transform: translateX(3px);
+	}
 `
 
 const ButtonMailIcon = styled.i`
@@ -197,10 +323,37 @@ const Button = styled.button`
   text-decoration: none;
 	display: inline-block;
 	margin-right: 12px;
+	outline: none;
+	&:hover,
+	&:active{
+		transform: translatey(-3px);
+  	box-shadow:0 5px 5px -5px #742488;
+	}
 	${props => props.outline && css`
 		background-color: transparent;
 		color: #ffffff;		
+	`}
+	${props => props.full && css`
+		width: 100%;		
   `}  
+`
+
+const ButtonLink = styled.a`
+  border: 1px solid #c10899;
+  background-color: #c10899;
+  color: #ffffff;
+  font-family: Moderat-Bold, sans-serif;
+  font-size: 14px;
+  padding: 6px 40px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+	display: inline-block;
+	&:hover,
+	&:active{
+		transform: translatey(-3px);
+  	box-shadow:0 5px 5px -5px #742488;
+	}
 `
 
 const ListItem = styled.div`
@@ -244,6 +397,11 @@ const Works = styled.div`
 const WorksFilter = styled.div`	
 `
 
+const WorksAction = styled.div`
+	margin-top: 26px;
+	text-align: center;	
+`
+
 const WorksList = styled.div`	
 	display: flex;
 	flex-wrap: wrap;
@@ -256,9 +414,9 @@ const WorksGrid = styled.div`
 	padding: 6px;
 `
 
-const WorksItem = styled.div`
-	cursor: pointer;
+const WorksItem = styled.a`	
 	position: relative;
+	display: block;
 	overflow: hidden;
 	&:after{
 		content: '';
@@ -325,12 +483,9 @@ const LoopWorks = ({ file }) => {
 	var rows = [];
 	for (var i = 0; i < 12; i++) {
 			rows.push(<WorksGrid key={i}>
-				<WorksItem>
+				<WorksItem target="_blank" href="https://www.tiktok.com/@naisutikitoku/video/6844478080329846017">
 					<WorksThumb>
-						<Img
-								fluid={file}
-								alt="Thumbnail asoy"
-							/>
+						<Img fluid={file} alt="Thumbnail asoy" />
 						<WorksVideo autoPlay muted loop playsInline>
 							<source src={tiktokVideo} type="video/mp4" />
 						</WorksVideo>
@@ -342,14 +497,35 @@ const LoopWorks = ({ file }) => {
   return rows;
 }
 
-const Tiktok = ({ data }) => (
+
+
+const Tiktok = ({ data }) => {
+	const [fullname, setFullName] = useState("");
+	const [email, setEmail] = useState("");
+	const [message, setMessage] = useState("");
+
+	const contactWhatsapp = (fullname, email, message) => {
+		const templateMessage = 'Hi Naisu, my name is ' + fullname + '. I have sent you this message: ' + message + '. You can reach me through this number or via this email: ' + email + '. Cheers!';
+		const intent = 'https://api.whatsapp.com/send?phone=' 
+			 + '0809894444' 
+			 + '&text=' 
+			 + encodeURIComponent(templateMessage);
+		
+		setFullName("");
+		setEmail("");
+		setMessage("");
+	
+		window.open(intent);  
+	}
+
+	return (
   <Layout>
     <Helmet title="Supercharge your TikTok with Us | Naisu Studio" />
 		<Nav>
 			<Container>
 				<NavContent>
 					<ButtonBack to="/"><ButtonBackIcon /></ButtonBack>
-					<ButtonMail to="/"><ButtonMailIcon /></ButtonMail>
+					<ButtonMail onClick={() => scrollTo('#formSection')}><ButtonMailIcon /></ButtonMail>
 					<NavLogo />
 				</NavContent>
 			</Container>
@@ -359,8 +535,8 @@ const Tiktok = ({ data }) => (
 				<Title white>Supercharge Your TikTok with Us</Title>
 				<Text white>Let us do our magic and watch as you make more money through TikTok and beyond!</Text>
 				<HeroAction>
-					<Button outline>See Our Works</Button>
-					<Button >Count Me In</Button>
+					<Button outline onClick={() => scrollTo('#worksSection')}>See Our Works</Button>
+					<Button onClick={() => scrollTo('#formSection')}>Count Me In</Button>
 				</HeroAction>
 			</Container>
 		</Hero>
@@ -410,7 +586,7 @@ const Tiktok = ({ data }) => (
 				</Row>
 			</Container>
 		</Section>
-		<Section>
+		<Section id="worksSection">
 			<Container>
 				<Title>Our Works</Title>
 				<Works>
@@ -420,13 +596,31 @@ const Tiktok = ({ data }) => (
 					<WorksList>
 						<LoopWorks file={data.file.childImageSharp.fluid}/>						
 					</WorksList>
+					<WorksAction>
+						<ButtonLink href="https://www.tiktok.com/@naisutikitoku" target="_blank">See More</ButtonLink>
+					</WorksAction>
 				</Works>
 			</Container>
 		</Section>
-		<Form>
+		<Form id="formSection">
 			<Container>
-				<Title white>Ready to Make Your First Step with TikTok?</Title>
+				<Title white twoLine>Ready to Make Your First Step with TikTok?</Title>
 				<Text white>We offer a free consultation to find out what your brand needs. Contact us now!</Text>				
+				<FormContent>
+					<FormField>
+						<FormInput type="text" name="fullname" id="fullname" placeholder="Jane Appleseed" value={fullname} onChange={e => setFullName(e.target.value)} />
+						<FormLabel htmlFor="fullname">Full Name</FormLabel>
+					</FormField>
+					<FormField>
+						<FormInput type="email" name="email" id="email" placeholder="jane.appleseed@example.com" value={email} onChange={e => setEmail(e.target.value)} />
+						<FormLabel htmlFor="email">Email</FormLabel>
+					</FormField>
+					<FormField>
+						<FormTextArea id="message" placeholder="Hello, Naisu!" name="message" value={message} onChange={e => setMessage(e.target.value)}/>
+						<FormLabel textarea htmlFor="message">Message</FormLabel>
+					</FormField>										
+					<Button outline full onClick={() => contactWhatsapp(fullname,email,message)}>Connect Now</Button>
+  			</FormContent>									
 			</Container>
 		</Form>
 		<Footer>
@@ -436,6 +630,7 @@ const Tiktok = ({ data }) => (
 			</Container>
 		</Footer>
   </Layout>
-)
+	)
+}
 
 export default Tiktok
