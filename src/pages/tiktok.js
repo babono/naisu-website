@@ -49,12 +49,18 @@ const Section = styled.section`
 		background-size: 120% 120%;
 		animation: ${gradientAnimation} 5s ease infinite;
 	`}
+	@media (max-width: 768px) {
+		padding: 32px 0;
+	}
 `
 
 const FormContent = styled.div`
 	margin-top: 48px;
 	max-width: 100%;
 	width: 328px;
+	@media (max-width: 768px) {
+		width: 100%;
+  }
 `
 
 const FormField = styled.div`
@@ -104,6 +110,7 @@ const FormTextArea = styled.textarea`
 	width: 100%;
 	resize: none;
 	padding: 1px 2px;
+	min-height: 64px;
 	&::-webkit-input-placeholder {
 		opacity: 0;
 		transition: inherit;
@@ -156,6 +163,9 @@ const Hero = styled.div`
 	animation: ${gradientAnimation} 5s ease infinite;
 	position: relative;
 	overflow: hidden;
+	@media (max-width: 768px) {
+    padding: 32px 0;
+  }
 	&:after {
 		content: "";
 		position: absolute;
@@ -283,32 +293,47 @@ const Title = styled.h1`
   color: #000000;
 	font-size: 36px;
 	line-height: 1.4;
+	margin: 0 0 12px;
 	${props => props.white && css`
     color: #ffffff;
 	`}
 	${props => props.twoLine && css`
 		max-width: 600px;
-  `}
+	`}
+	@media (max-width: 768px) {
+		font-size: 24px;
+	}
 `
 
 const Subtitle = styled.h2`
 	font-family: Karla-Bold, sans-serif;
   color: #000000;
 	font-size: 24px;
+	line-height: 1.4;
 	margin: 0;
 	${props => props.violet && css`
     color: #c10899;
 	`}
+	${props => props.white && css`
+    color: #ffffff;
+	`}
+	@media (max-width: 768px) {
+		font-size: 16px;
+	}
 `
 
 const Text = styled.p`
 	font-family: Karla-Regular, sans-serif;
   color: #000000;
 	font-size: 16px;
+	line-height: 1.4;
 	margin: 0;
 	${props => props.white && css`
     color: #ffffff;
-  `}
+	`}
+	@media (max-width: 768px) {
+		font-size: 12px;
+	}
 `
 
 const Button = styled.button`
@@ -366,29 +391,50 @@ const ListItem = styled.div`
 `
 
 const ListImage = styled.div`	
-	width: 20%;
-	padding-right: 24px;
+	width: 120px;
+	margin-right: 24px;
 	line-height: 0;
+	flex: 0 0 auto;
+	@media (max-width: 768px) {
+		width: 60px;
+		margin-right: 16px;
+  }
 `
 
 const ListDescription = styled.div`
-	
+	flex: 1 1 auto;
 `
 
 const Row = styled.div`
 	display: flex;
 	margin: 32px -16px 0;
+	@media (max-width: 768px) {
+		flex-wrap: wrap;
+  }
 `
 
 const ColumnItem = styled.div`
 	width: 33.33%;
 	flex: 0 0 auto;
 	padding: 0 16px;
+	@media (max-width: 768px) {
+		width: 100%;
+		margin-bottom: 24px;
+		&:last-child{
+			margin-bottom: 0;
+		}
+  }
 `
 
 const ColumnImage = styled.div`
 	line-height: 0;
 	margin-bottom: 16px;
+	img{
+		filter: brightness(0) invert(1);
+	}
+	@media (max-width: 768px) {
+		width: 80px;
+  }
 `
 
 const Works = styled.div`	
@@ -402,16 +448,40 @@ const WorksAction = styled.div`
 	text-align: center;	
 `
 
+const WorksListWrapper = styled.div`
+	@media (max-width: 768px) {
+		position: relative;
+		margin-left: -16px;
+		margin-right: -16px;
+		overflow-x: auto;		
+	}	
+`
+
 const WorksList = styled.div`	
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 -6px;
+	@media (max-width: 768px) {
+		margin: 0;
+		flex-wrap: nowrap;
+		white-space: nowrap;
+		&:before,
+		&:after{
+			content: '';
+			display: inline-block;
+			width: 10px;
+			flex: 0 0 auto;
+		}
+	}	
 `
 
 const WorksGrid = styled.div`	
 	flex: 0 0 auto;
 	width: 16.6667%;
 	padding: 6px;
+	@media (max-width: 768px) {
+		width: 43%;
+	}	
 `
 
 const WorksItem = styled.a`	
@@ -438,7 +508,7 @@ const WorksItem = styled.a`
 		video {
 			display: block;
 		}
-	}	
+	}
 `
 
 const WorksThumb = styled.div`	
@@ -569,7 +639,7 @@ const Tiktok = ({ data }) => {
 		<Section gradient>
 			<Container>
 				<Title twoLine white>Grow Your Brand and Be a Winner in TikTok</Title>
-				<Text white>With A-Z services in TikTok, we can help grow your brand in no time, because time is money. So simple!</Text>
+				<Subtitle white>With A-Z services in TikTok, we can help grow your brand in no time, because time is money. So simple!</Subtitle>
 				<Row>
 					<ColumnItem>
 						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
@@ -593,9 +663,11 @@ const Tiktok = ({ data }) => {
 					<WorksFilter>
 
 					</WorksFilter>
-					<WorksList>
-						<LoopWorks file={data.file.childImageSharp.fluid}/>						
-					</WorksList>
+					<WorksListWrapper>
+						<WorksList>
+							<LoopWorks file={data.file.childImageSharp.fluid}/>						
+						</WorksList>
+					</WorksListWrapper>
 					<WorksAction>
 						<ButtonLink href="https://www.tiktok.com/@naisutikitoku" target="_blank">See More</ButtonLink>
 					</WorksAction>
