@@ -212,6 +212,15 @@ const Form = styled.section`
 const HeroAction = styled.div`
 	display: flex;
 	margin-top: 24px;
+	@media (max-width: 768px) {
+		justify-content: space-between;
+		button{
+			flex: 0 0 auto;
+			width: calc(50% - 6px);
+			margin-right: 0;
+			padding: 6px;
+		}
+	}
 `
 
 const Nav = styled.nav`
@@ -353,6 +362,9 @@ const Button = styled.button`
 	&:active{
 		transform: translatey(-3px);
   	box-shadow:0 5px 5px -5px #742488;
+	}
+	@media (max-width: 768px) {
+		padding: 6px 32px;
 	}
 	${props => props.outline && css`
 		background-color: transparent;
