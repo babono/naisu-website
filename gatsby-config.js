@@ -50,20 +50,21 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-source-prismic-graphql",
+      resolve: 'gatsby-source-prismic',
       options: {
-        repositoryName: "babono", // (REQUIRED, replace with your own)
-        accessToken:
-          "MC5YazY2dnhFQUFDUUFmV3Mx.d--_ve-_ve-_vXJgKe-_vUDvv73vv70O77-977-9Z2kLZjfvv73vv70477-9XSzvv71A77-977-9QO-_ve-_vQ", // (optional API access token)
-        pages: [
-          {
-            // (optional, builds pages dynamically)
-            type: "Works", // TypeName from prismic
-            match: "/w/:uid", // Pages will be generated under this pattern
-            path: "/w", // Placeholder page for unpublished documents
-            component: require.resolve("./src/templates/works.js"),
-          },
-        ],
+        repositoryName: 'babono',
+        accessToken: 'MC5YazY2dnhFQUFDUUFmV3Mx.d--_ve-_ve-_vXJgKe-_vUDvv73vv70O77-977-9Z2kLZjfvv73vv70477-9XSzvv71A77-977-9QO-_ve-_vQ',
+        schemas: {
+          reach: require('./src/schemas/reach.json'),
+          sections: require('./src/schemas/sections.json'),          
+          tiktok_video: require('./src/schemas/tiktok_video.json'),
+          tiktok: require('./src/schemas/tiktok.json'),
+          works: require('./src/schemas/works.json'),
+        },     
+        shouldDownloadImage: ({ node, key, value }) => {
+          // Return true to download the image or false to skip.
+          return true
+        },   
       },
     },
     `gatsby-transformer-sharp`,

@@ -1,0 +1,64 @@
+{
+	  "Main" : {
+		"title" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+			"label" : "Title"
+		  }
+		},
+		"background_image_section_1" : {
+		  "type" : "Image",
+		  "config" : {
+			"constraint" : { },
+			"thumbnails" : [ ],
+			"label" : "Background Image Section 1"
+		  }
+		},
+		"text_section_1" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+			"label" : "Text Section 1"
+		  }
+		},
+		"background_image_section_2" : {
+		  "type" : "Image",
+		  "config" : {
+			"constraint" : { },
+			"thumbnails" : [ ],
+			"label" : "Background Image Section 2"
+		  }
+		},
+		"image_text_section_2" : {
+		  "type" : "Image",
+		  "config" : {
+			"constraint" : { },
+			"thumbnails" : [ ],
+			"label" : "Image Text Section 2"
+		  }
+		},
+		"text_section_2" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+			"label" : "Text Section 2"
+		  }
+		},
+		"background_image_section_3" : {
+		  "type" : "Image",
+		  "config" : {
+			"constraint" : { },
+			"thumbnails" : [ ],
+			"label" : "Background Image Section 3"
+		  }
+		},
+		"text_section_3" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "strong, em",
+			"label" : "Text Section 3"
+		  }
+		}
+	  }
+	}

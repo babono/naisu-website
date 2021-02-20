@@ -1,0 +1,19 @@
+{
+	  "Main" : {
+		"client" : {
+		  "type" : "Select",
+		  "config" : {
+			"options" : [ "Buku Warung", "By.U", "Flip", "Gojek", "Lingokids", "Pomelo", "Shopback", "Sephora", "Tokopedia", "Zalora", "Zenius" ],
+			"label" : "client",
+			"placeholder" : "Client"
+		  }
+		},
+		"embed_video" : {
+		  "type" : "Embed",
+		  "config" : {
+			"label" : "Embed Video",
+			"placeholder" : "Link Video"
+		  }
+		}
+	  }
+	}

@@ -5,7 +5,9 @@ import Helmet from "react-helmet"
 import { graphql } from "gatsby"
 import styled, { css, keyframes } from 'styled-components'
 import iconBack from "../images/ic-back.svg"
+import iconBackWhite from "../images/ic-back-white.svg"
 import iconMail from "../images/ic-mail.svg"
+import iconMailWhite from "../images/ic-mail-white.svg"
 import iconPlayCircle from "../images/ic-play-circle.svg"
 import imageTornado from "../images/image-tornado.svg"
 import Img from "gatsby-image"
@@ -15,6 +17,7 @@ import tiktokVideo from "../videos/video-tiktok.mp4"
 import imageEllipse from "../images/image-ellipse.png"
 import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
+import logoNaisuTiktokWhite from "../images/logo-naisu-tiktok-white.svg"
 
 const gradientAnimation = keyframes`
 	0%{background-position:0% 0%}
@@ -158,8 +161,7 @@ const FooterText = styled.div`
 const Hero = styled.div`		
 	background: linear-gradient(135deg, #0918a4 0%, #9e2183 100%);
   background-size: 120% 120%;
-	padding: 110px 0;
-	margin-top: 64px;
+	padding: 200px 0 108px;
 	animation: ${gradientAnimation} 5s ease infinite;
 	position: relative;
 	overflow: hidden;
@@ -178,6 +180,7 @@ const Hero = styled.div`
 		top: 0;
 		left: 0;
 		animation: ${tornadoAnimation} 5s ease infinite;
+		mix-blend-mode: soft-light;
 		@media (max-width: 768px) {
 			display: none;
 		}
@@ -203,6 +206,7 @@ const Form = styled.section`
 		top: 0;
 		left: 0;
 		animation: ${tornadoAnimation} 5s ease infinite;
+		mix-blend-mode: soft-light;
 		@media (max-width: 768px) {
 			display: none;
 		}
@@ -223,14 +227,47 @@ const HeroAction = styled.div`
 	}
 `
 
+const NavLogo = styled.div`
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  width: 164px;
+  height: 24px;
+  margin-left: -72px;
+  background-size: contain;  
+  background-repeat: no-repeat;
+  background-position: center;  
+`
+
+const ButtonBackIcon = styled.i`
+	width: 24px;
+	height: 24px; 
+	background-size: contain;
+`
+
+const ButtonMailIcon = styled.i`
+	width: 24px;
+	height: 24px; 
+	background-size: contain;
+`
+
 const Nav = styled.nav`
-	background: white;
-	position: fixed;
+	background: ${props => props.scrolled ? "white" : "transparent"}; 
+	position: ${props => props.scrolled ? "fixed" : "absolute"}; 
 	top: 0;
 	left: 0;
 	width: 100%;
 	z-index: 100;
-	box-shadow: inset 0 -1px 0 rgba(230, 230, 230, 1);
+	box-shadow: ${props => props.scrolled ? "inset 0 -1px 0 rgba(230, 230, 230, 1)" : "none"}; 
+	${ButtonBackIcon} {
+		background-image: ${props => props.scrolled ? `url(${iconBack})` : `url(${iconBackWhite})` };
+	}
+	${ButtonMailIcon} {
+		background-image: ${props => props.scrolled ? `url(${iconMail})` : `url(${iconMailWhite})` };
+	}
+	${NavLogo} {
+		background-image: ${props => props.scrolled ? `url(${logoNaisuTiktok})` : `url(${logoNaisuTiktokWhite})` };
+	}
 `
 
 const NavContent = styled.div`
@@ -238,19 +275,6 @@ const NavContent = styled.div`
 	height: 64px;
 	display: flex;
 	justify-content: space-between;
-`
-
-const NavLogo = styled.div`
-  position: absolute;
-  top: 24px;
-  left: 50%;
-  width: 144px;
-  height: 18px;
-  margin-left: -72px;
-  background-size: contain;
-  background-image: url(${logoNaisuTiktok});
-  background-repeat: no-repeat;
-  background-position: center;  
 `
 
 const ButtonBack = styled(Link)`
@@ -266,12 +290,7 @@ const ButtonBack = styled(Link)`
 	}
 `
 
-const ButtonBackIcon = styled.i`
-	width: 16px;
-	height: 16px; 
-	background-image: url(${iconBack});
-	background-size: contain;
-`
+
 
 const ButtonMail = styled.button`
 	width: 24px;
@@ -291,12 +310,8 @@ const ButtonMail = styled.button`
 	}
 `
 
-const ButtonMailIcon = styled.i`
-	width: 20px;
-	height: 16px; 
-	background-image: url(${iconMail});
-	background-size: contain;
-`
+
+
 const Title = styled.h1`
   font-family: Merriweather-Bold, sans-serif;
   color: #000000;
@@ -420,6 +435,7 @@ const ListDescription = styled.div`
 const Row = styled.div`
 	display: flex;
 	margin: 32px -16px 0;
+	flex-wrap: wrap;
 	@media (max-width: 768px) {
 		flex-wrap: wrap;
   }
@@ -429,9 +445,15 @@ const ColumnItem = styled.div`
 	width: 33.33%;
 	flex: 0 0 auto;
 	padding: 0 16px;
+	&:nth-child(-n+3) {
+		margin-bottom: 48px;
+	}
 	@media (max-width: 768px) {
 		width: 100%;
 		margin-bottom: 24px;
+		&:nth-child(-n+3) {
+			margin-bottom: 24px;
+		}		
 		&:last-child{
 			margin-bottom: 0;
 		}
@@ -614,8 +636,8 @@ const Tiktok = ({ data }) => {
 		</Nav>
 		<Hero>
 			<Container>
-				<Title white>Supercharge Your TikTok with Us</Title>
-				<Text white>Let us do our magic and watch as you make more money through TikTok and beyond!</Text>
+				<Title white>Beef Up Your TikTok with Naisu</Title>
+				<Text white>Advertise better and earn more with the most effective-yet-efficient way!</Text>
 				<HeroAction>
 					<Button outline onClick={() => scrollTo('#worksSection')}>See Our Works</Button>
 					<Button onClick={() => scrollTo('#formSection')}>Count Me In</Button>
@@ -624,46 +646,59 @@ const Tiktok = ({ data }) => {
 		</Hero>
 		<Section>
 			<Container>
-				<Title twoLine>Grow Your Brand and Be a Winner in TikTok</Title>
+				<Title>Take Your Brand to The Top on TikTok</Title><br />				
 				<ListItem>
 					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
 					<ListDescription>
-						<Subtitle violet>Grow Your Brand and Be a Winner in TikTok</Subtitle>
-						<Text>37 million monthly active users (MAU) with 18 million users increase from Q4 2019 until Q1 2020.</Text>
+						<Subtitle violet>Skyrocketing Amount of Users in Indonesia</Subtitle>
+						<Text>53.4 million monthly active users (MAU) by Q4 2020.</Text>
 					</ListDescription>
 				</ListItem>
 				<ListItem>
 					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
 					<ListDescription>
-						<Subtitle violet>TikTok is Fueled by Young Energy in Indonesia</Subtitle>
-						<Text>84% of TikTok users in Indonesia are under 25 years old.</Text>
+						<Subtitle violet>Viewed and Recognized by Bunch of Eyes</Subtitle>
+						<Text>212.7 billion monthly video views by Q4 2020.</Text>
 					</ListDescription>
 				</ListItem>
 				<ListItem>
 					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
 					<ListDescription>
-						<Subtitle violet>Significantly Improve Your Brand Image through TikTok</Subtitle>
-						<Text>13% of brand owners changed their brand image to be more open, modern, unique, and creative-looking</Text>
+						<Subtitle violet>Significant Improvement of Brand Image</Subtitle>
+						<Text>87% of users see ads on TikTok shift brand image to be more open, modern, unique, creative, and interesting.</Text>
 					</ListDescription>
 				</ListItem>
 			</Container>
 		</Section>
 		<Section gradient>
 			<Container>
-				<Title twoLine white>Grow Your Brand and Be a Winner in TikTok</Title>
-				<Subtitle white>With A-Z services in TikTok, we can help grow your brand in no time, because time is money. So simple!</Subtitle>
+				<Title twoLine white>More Than Just Being Viral, Grow Your Brand on TikTok!</Title>
+				<Subtitle white>With A-to-Z services, let us show you how to make your marketing budget more efficient through the unique algorithm of TikTok.</Subtitle>
 				<Row>
 					<ColumnItem>
 						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
-						<Text white>I want to know the no. 1 reason here, there, and everywhere. Of course this is the second dummy sentence.</Text>
+						<Subtitle white>Campaign Strategy</Subtitle>
+						<Text white>Suggesting the most effective strategy, adjusted with the brand’s needs, including timeline distribution along with campaign objective and message. </Text>
 					</ColumnItem>
 					<ColumnItem>
 						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
-						<Text white>I want to know the no. 1 reason here, there, and everywhere. Of course this is the second dummy sentence.</Text>
+						<Subtitle white>Creative Brief</Subtitle>
+						<Text white>Creating the concept with many references, varied from the trending content to the organic ones, as well as the creative brief and guidance for KOL to do the video production.</Text>
 					</ColumnItem>
 					<ColumnItem>
 						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
-						<Text white>I want to know the no. 1 reason here, there, and everywhere. Of course this is the second dummy sentence.</Text>
+						<Subtitle white>Content Production</Subtitle>
+						<Text white>Executing the content production with the finest recording tools and equipment in a bid to visualize the creative brief.</Text>
+					</ColumnItem>
+					<ColumnItem>
+						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<Subtitle white>KOL Marketing</Subtitle>
+						<Text white>Directing and supervising KOLs or influencers in making videos based on the creative brief, as well as handling the dealing process with legal work agreement.</Text>
+					</ColumnItem>
+					<ColumnItem>
+						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<Subtitle white>Media Buying</Subtitle>
+						<Text white>Selecting the best channel of distribution on TikTok to meet the needs of the brand. </Text>
 					</ColumnItem>
 				</Row>
 			</Container>
@@ -688,8 +723,8 @@ const Tiktok = ({ data }) => {
 		</Section>
 		<Form id="formSection">
 			<Container>
-				<Title white twoLine>Ready to Make Your First Step with TikTok?</Title>
-				<Text white>We offer a free consultation to find out what your brand needs. Contact us now!</Text>				
+				<Title white twoLine>Ready to Make Your First Step on TikTok with Naisu?</Title>
+				<Text white>Find out what the needs of your brand as consultation is free. Ping us now!</Text>				
 				<FormContent>
 					<FormField>
 						<FormInput type="text" name="fullname" id="fullname" placeholder="Jane Appleseed" value={fullname} onChange={e => setFullName(e.target.value)} />
@@ -703,7 +738,7 @@ const Tiktok = ({ data }) => {
 						<FormTextArea id="message" placeholder="Hello, Naisu!" name="message" value={message} onChange={e => setMessage(e.target.value)}/>
 						<FormLabel textarea htmlFor="message">Message</FormLabel>
 					</FormField>										
-					<Button outline full onClick={() => contactWhatsapp(fullname,email,message)}>Connect Now</Button>
+					<Button outline full onClick={() => contactWhatsapp(fullname,email,message)}>Ping Now</Button>
   			</FormContent>									
 			</Container>
 		</Form>

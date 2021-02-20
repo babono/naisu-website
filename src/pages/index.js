@@ -393,92 +393,100 @@ const WorksItem = styled(Link)`
 
 export const query = graphql`
   query HomeQuery {
-    prismic {
-      allSectionss {
+      allPrismicSections {
         edges {
           node {
-            background_image_section_1
-            background_image_section_1Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
+            data {
+              background_image_section_1 {                
+                url
+              }
+              text_section_1 {
+                text
+              }
+              background_image_section_2 {
+                url
+              }
+              image_text_section_2 {
+                url
+              }
+              text_section_2 {
+                text
+              }
+              background_image_section_3 {
+                url
+              }
+              text_section_3 {
+                raw
               }
             }
-            text_section_1
-            background_image_section_2
-            background_image_section_2Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
-            }
-            image_text_section_2
-            text_section_2
-            background_image_section_3
-            background_image_section_3Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
-            }
-            text_section_3
-            _linkType
           }
         }
       }
-      allReachs {
+      allPrismicReach {
         edges {
           node {
-            title
-            address
-            email
-            phone
-            social {
-              name
-              icon
-              link {
-                _linkType
-                ... on PRISMIC__ExternalLink {
-                  _linkType
+            data {
+              title {
+                text
+              }
+              address {
+                raw
+              }
+              email {
+                raw
+              }
+              phone {
+                raw
+              }
+              social {
+                name {
+                  text
+                }
+                icon {
+                  url
+                }
+                link {
                   url
                 }
               }
             }
-
-            _linkType
           }
         }
       }
-      allWorkss(sortBy: order_ASC) {
+      allPrismicWorks(sort: {fields: data___order}) {
         edges {
           node {
-            title
-            _meta {
-              uid
-            }
-            image_thumbnail
-            image_thumbnailSharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
+            uid
+            data {
+              title {
+                text
+              }
+              image_thumbnail {
+                alt
+                copyright
+                url
+                thumbnails
+                localFile {
+                  childImageSharp {
+                    fluid(maxWidth: 835, quality: 100) {
+                      ...GatsbyImageSharpFluid_withWebp
+                    }
+                  }
                 }
               }
             }
           }
         }
       }
-    }
+    
   }
 `
 
 const RenderWorkList = ({ works }) => {
   return works.map(item => (
-    <WorksItem key={item.node._meta.uid} to={"/w/" + item.node._meta.uid}>
-      <Img fluid={item.node.image_thumbnailSharp.childImageSharp.fluid} />
-      <WorksInfo>{RichText.asText(item.node.title)}</WorksInfo>
+    <WorksItem key={item.node.uid} to={"/w/" + item.node.uid}>
+      <Img fluid={item.node.data.image_thumbnail.localFile.childImageSharp.fluid} />
+      <WorksInfo>{item.node.data.title.text}</WorksInfo>
     </WorksItem>
   ))
 }
@@ -492,9 +500,9 @@ const linkResolver = doc => {
 }
 
 export default ({ data }) => {
-  const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
-  const doc2 = data.prismic.allSectionss.edges.slice(0, 1).pop()
-  const doc3 = data.prismic.allReachs.edges.slice(0, 1).pop()
+  const doc = data.allPrismicWorks.edges.slice(0, 1).pop()
+  const doc2 = data.allPrismicSections.edges.slice(0, 1).pop()
+  const doc3 = data.allPrismicReach.edges.slice(0, 1).pop()
   if (!doc || !doc2 || !doc3) return null
 
   const [contactTopic, setContactTopic] = useState("Business")
@@ -503,14 +511,10 @@ export default ({ data }) => {
     <Layout>
       <Helmet title="Hello | Naisu Studio" />
       <BgStyle
-        bgImageHome={doc2.node.background_image_section_1.url}
-        bgImageIntro={doc2.node.background_image_section_2.url}
-        bgImageAbout={doc2.node.background_image_section_3.url}
+        bgImageHome={doc2.node.data.background_image_section_1.url}
+        bgImageIntro={doc2.node.data.background_image_section_2.url}
+        bgImageAbout={doc2.node.data.background_image_section_3.url}
       />
-      {/* <BgImage bgImageHome={doc2.node.background_image_section_1.url}
-        src=
-        alt="image introducing"
-      /> */}
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
@@ -535,32 +539,32 @@ export default ({ data }) => {
               <section className="section">
                 <Container>
                   <IntroText1>
-                    {RichText.asText(doc2.node.text_section_1)}
+                    {doc2.node.data.text_section_1.text}
                   </IntroText1>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroImage
-                    src={doc2.node.image_text_section_2.url}
+                    src={doc2.node.data.image_text_section_2.url}
                     alt="image introducing"
                   />
                   <IntroText2>
-                    {RichText.asText(doc2.node.text_section_2)}
+                    {doc2.node.data.text_section_2.text}
                   </IntroText2>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroText3>
-                    {RichText.render(doc2.node.text_section_3)}
+                    {RichText.render(doc2.node.data.text_section_3.raw)}
                   </IntroText3>
                 </Container>
               </section>
               <section className="section bgBlue">
                 <Container>
                   <WorksWrapper>
-                    <RenderWorkList works={data.prismic.allWorkss.edges} />
+                    <RenderWorkList works={data.allPrismicWorks.edges} />
                   </WorksWrapper>
                 </Container>
               </section>
@@ -569,28 +573,25 @@ export default ({ data }) => {
                   <ContactContainer>
                     <ContactInfo>
                       <AddressTitle>
-                        {RichText.asText(doc3.node.title)}
+                        {doc3.node.data.title.text}
                       </AddressTitle>
                       <AddressDetail>
                         <RichText
-                          render={doc3.node.address}
-                          linkResolver={linkResolver}
+                          render={doc3.node.data.address.raw}                          
                         />
                       </AddressDetail>
                       <ContactText>
-                        {RichText.asText(doc3.node.email)}
+                        {RichText.asText(doc3.node.data.email.raw)}
                       </ContactText>
                       <ContactText>
-                        {RichText.asText(doc3.node.phone)}
+                        {RichText.asText(doc3.node.data.phone.raw)}
                       </ContactText>
                       <Social>
                         <SocialTitle>Our Social</SocialTitle>
-                        {doc3.node.social.map(social => (
+                        {doc3.node.data.social.map(social => (
                           <SocialItem href={social.link.url}>
                             <SocialIcon src={social.icon.url} />
-                            <SocialName>
-                              {RichText.asText(social.name)}
-                            </SocialName>
+                            <SocialName>{social.name.text}</SocialName>
                           </SocialItem>
                         ))}
                       </Social>
