@@ -32,4 +32,26 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     })
   })
+  
+  // Query all Pages with their IDs and template data.
+  const tiktokVideo = await graphql(`
+    {
+      allPrismicTiktokVideo {
+        nodes {
+          id
+        }
+      }
+    }
+  `)
+
+  // Create pages for each Page in Prismic using the selected template.
+  tiktokVideo.data.allPrismicTiktokVideo.nodes.forEach((node) => {
+    createPage({
+      path: `/tv/${node.id}`,
+      component: path.resolve(__dirname, 'src/templates/tiktok-video.js'),
+      context: {
+        id: node.id,
+      },
+    })
+  })
 }

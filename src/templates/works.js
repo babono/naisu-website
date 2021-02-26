@@ -17,26 +17,15 @@ export const query = graphql`
         node {
           data {
             title {
-              html
               text
-              raw
             }
             project_description {
-              html
               text
-              raw
             }
             logo_company {
-              alt
-              copyright
               url
-              thumbnails
             }
             header_image {
-              alt
-              copyright
-              url
-              thumbnails
               localFile {
                 childImageSharp {
                   fluid(maxWidth: 2660, webpQuality: 100) {
@@ -50,14 +39,10 @@ export const query = graphql`
             }
             category {
               category_description {
-                html
-                text
                 raw
               }
               category_name {
-                html
                 text
-                raw
               }
             }
           }
@@ -275,12 +260,10 @@ const Works = props => {
     // eslint-disable-next-line global-require
     require("smooth-scroll")('a[href*="#"]')
   }
-  
-  console.log(doc);
 
   return (
     <Layout>
-      <SEO title={RichText.asText(doc.node.title) + " - Works"} />
+      <SEO title={doc.node.data.title.text + " - Works"} />
       <Hero
         id="top"
         Tag="div"

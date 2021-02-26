@@ -1,4 +1,7 @@
 module.exports = {
+  flags: {
+    DEV_SSR: false,
+  },
   siteMetadata: {
     title: `NAISU Studio`,
     description: `Bespoke creative and digital solutions with
@@ -69,6 +72,17 @@ module.exports = {
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-plugin-modal-routing`,
+      options: {
+        appElement: '#___gatsby',
+        modalProps: { 
+          overlayClassName: "ReactModal__Overlay",
+          className: "ReactModal__Content",
+          htmlOpenClassName: "ReactModal__Html--open",            
+        }
+      }
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {

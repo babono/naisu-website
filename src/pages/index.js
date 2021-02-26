@@ -478,7 +478,6 @@ export const query = graphql`
           }
         }
       }
-    
   }
 `
 

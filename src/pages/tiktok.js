@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Link } from "gatsby"
+import { Link } from 'gatsby-plugin-modal-routing'
 import Layout from "../components/layout"
 import Helmet from "react-helmet"
 import { graphql } from "gatsby"
@@ -18,6 +18,7 @@ import imageEllipse from "../images/image-ellipse.png"
 import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
 import logoNaisuTiktokWhite from "../images/logo-naisu-tiktok-white.svg"
+import { useScrollPosition } from '@n8tb1t/use-scroll-position'
 
 const gradientAnimation = keyframes`
 	0%{background-position:0% 0%}
@@ -252,22 +253,39 @@ const ButtonMailIcon = styled.i`
 `
 
 const Nav = styled.nav`
-	background: ${props => props.scrolled ? "white" : "transparent"}; 
-	position: ${props => props.scrolled ? "fixed" : "absolute"}; 
+	background: ${props => props.white ? "white" : "transparent"}; 
+	position: ${props => props.white ? "fixed" : "absolute"}; 
 	top: 0;
 	left: 0;
 	width: 100%;
 	z-index: 100;
-	box-shadow: ${props => props.scrolled ? "inset 0 -1px 0 rgba(230, 230, 230, 1)" : "none"}; 
+	box-shadow: ${props => props.white ? "inset 0 -1px 0 rgba(230, 230, 230, 1)" : "none"}; 	
+	transition: all 0.3s ease-in;
 	${ButtonBackIcon} {
-		background-image: ${props => props.scrolled ? `url(${iconBack})` : `url(${iconBackWhite})` };
+		background-image: ${props => props.white ? `url(${iconBack})` : `url(${iconBackWhite})` };
 	}
 	${ButtonMailIcon} {
-		background-image: ${props => props.scrolled ? `url(${iconMail})` : `url(${iconMailWhite})` };
+		background-image: ${props => props.white ? `url(${iconMail})` : `url(${iconMailWhite})` };
 	}
 	${NavLogo} {
-		background-image: ${props => props.scrolled ? `url(${logoNaisuTiktok})` : `url(${logoNaisuTiktokWhite})` };
+		background-image: ${props => props.white ? `url(${logoNaisuTiktok})` : `url(${logoNaisuTiktokWhite})` };
 	}
+	${props => {
+		if (props.white && props.scrolled) {
+			return `
+				transform: translateY(0);				
+		`
+		} else if (props.white) {
+			return `
+				transform: translateY(-64px);				
+				
+		`
+		} else {
+			return `
+				transform: none;
+		`
+		}
+	}}
 `
 
 const NavContent = styled.div`
@@ -518,7 +536,22 @@ const WorksGrid = styled.div`
 	}	
 `
 
-const WorksItem = styled.a`	
+const WorksInfo = styled.div`	
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	transition: transform .3s ease;
+	transform: translateY(-100%);
+	z-index: 2;
+	justify-content: center;
+	align-items: center;
+`
+
+const WorksItem = styled(Link)`	
 	position: relative;
 	display: block;
 	overflow: hidden;
@@ -527,14 +560,15 @@ const WorksItem = styled.a`
 		position: absolute;
 		top: 0;
 		left: 0;
-		background-color: rgba(0,0,0,0.5);
+		background-color: rgba(0,0,0,0);		
 		width: 100%;
 		height: 100%;
 		transition: background-color .3s ease;
+		z-index: 1;
 	}
 	&:hover{
 		&:after{
-			background-color: rgba(0,0,0,0);
+			background-color: rgba(0,0,0,0.6);
 		}
 		i {
 			transform: translate(-21px,350%);
@@ -542,10 +576,30 @@ const WorksItem = styled.a`
 		video {
 			display: block;
 		}
+		${WorksInfo} {
+			transform: translateY(0);
+		}
 	}
 `
 
 const WorksThumb = styled.div`	
+`
+
+
+
+const WorksTitle = styled.div`	
+	font-size: 12px;
+	color: #ffffff;
+	font-family: Karla-Bold, sans-serif;
+	line-height: 1.5;
+	margin-bottom: 4px;
+`
+
+const WorksClient = styled.div`	
+	font-size: 10px;
+	color: #ffffff;
+	font-family: Karla-Regular, sans-serif;
+	line-height: 1.5;
 `
 
 const WorksVideo = styled.video`
@@ -572,7 +626,7 @@ const PlayIcon = styled.i`
 `
 
 export const query = graphql`
-  query MyQuery {
+  query TikTokQuery {
     file(relativePath: { eq: "image-thumb-tiktok.jpeg" }) {
       childImageSharp {
         fluid {
@@ -580,6 +634,43 @@ export const query = graphql`
         }
       }
     }
+		allPrismicTiktokVideo {
+			edges {
+				node {
+					id
+					data {
+						client
+						embed_video {
+							embed_url
+							thumbnail_url
+						}
+						thumbnail_video {
+							localFile {
+								childImageSharp {
+										fluid(maxWidth: 540, webpQuality: 100) {
+											...GatsbyImageSharpFluid_withWebp
+										}
+									}
+							}
+						}
+						title_video {
+							text
+						}
+					}
+				}
+			}
+		}
+		allPrismicTiktok {
+			edges {
+				node {
+					data {
+						hero_title {
+							text
+						}
+					}
+				}
+			}
+		}
   }
 `
 
@@ -607,6 +698,8 @@ const Tiktok = ({ data }) => {
 	const [fullname, setFullName] = useState("");
 	const [email, setEmail] = useState("");
 	const [message, setMessage] = useState("");
+	
+	const [isScrolled, setIsScrolled] = useState(false);
 
 	const contactWhatsapp = (fullname, email, message) => {
 		const templateMessage = 'Hi Naisu, my name is ' + fullname + '. I have sent you this message: ' + message + '. You can reach me through this number or via this email: ' + email + '. Cheers!';
@@ -621,11 +714,41 @@ const Tiktok = ({ data }) => {
 	
 		window.open(intent);  
 	}
+	
+	useScrollPosition(({ prevPos, currPos }) => {
+		console.log(currPos.x)
+		console.log(currPos.y)
+		
+		if (currPos.y < -64) {
+			console.log("masuk");
+			setIsScrolled(true)	
+		}
+		else{
+			console.log("nope");
+			setIsScrolled(false)	
+		}
+	})
+	
+	const generateVideoSource = (embedUrl) => {
+		const split = embedUrl.split("/");
+		const videoSourceUrl = "https://drive.google.com/uc?export=download&id=" + split[5];
+		
+		return videoSourceUrl;
+	}
 
 	return (
   <Layout>
     <Helmet title="Supercharge your TikTok with Us | Naisu Studio" />
 		<Nav>
+			<Container>
+				<NavContent>
+					<ButtonBack to="/"><ButtonBackIcon /></ButtonBack>
+					<ButtonMail onClick={() => scrollTo('#formSection')}><ButtonMailIcon /></ButtonMail>
+					<NavLogo />
+				</NavContent>
+			</Container>
+		</Nav>
+		<Nav white scrolled={isScrolled}>
 			<Container>
 				<NavContent>
 					<ButtonBack to="/"><ButtonBackIcon /></ButtonBack>
@@ -711,8 +834,24 @@ const Tiktok = ({ data }) => {
 
 					</WorksFilter>
 					<WorksListWrapper>
-						<WorksList>
-							<LoopWorks file={data.file.childImageSharp.fluid}/>						
+						<WorksList>							
+							{data.allPrismicTiktokVideo.edges.map((tiktokVideo, index) => (
+								<WorksGrid key={index}>
+									<WorksItem to={'/tv/' + tiktokVideo.node.id} asModal>
+										<WorksThumb>											
+											<Img fluid={tiktokVideo.node.data.thumbnail_video.localFile.childImageSharp.fluid} />
+											<WorksVideo autoPlay muted loop playsInline>
+												<source src={generateVideoSource(tiktokVideo.node.data.embed_video.embed_url)} type="video/mp4" />
+											</WorksVideo>
+										</WorksThumb>
+										<PlayIcon />
+										<WorksInfo>
+											<WorksTitle>{tiktokVideo.node.data.title_video.text}</WorksTitle>
+											<WorksClient>{tiktokVideo.node.data.client}</WorksClient>
+										</WorksInfo>										
+									</WorksItem>
+								</WorksGrid>
+							))}																	
 						</WorksList>
 					</WorksListWrapper>
 					<WorksAction>

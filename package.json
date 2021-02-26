@@ -6,6 +6,7 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@fullpage/react-fullpage": "^0.1.17",
+    "@n8tb1t/use-scroll-position": "^2.0.3",
     "babel-plugin-styled-components": "^1.11.1",
     "core-js": "^3.6.5",
     "gatsby": "^2.24.64",
@@ -15,6 +16,7 @@
     "gatsby-plugin-facebook-pixel": "^1.0.5",
     "gatsby-plugin-google-tagmanager": "^2.4.0",
     "gatsby-plugin-manifest": "^2.4.31",
+    "gatsby-plugin-modal-routing": "^1.2.0",
     "gatsby-plugin-offline": "^3.2.28",
     "gatsby-plugin-react-helmet": "^3.3.11",
     "gatsby-plugin-sharp": "^2.6.36",
