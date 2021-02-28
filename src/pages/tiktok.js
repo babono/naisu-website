@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from 'gatsby-plugin-modal-routing'
 import Layout from "../components/layout"
 import Helmet from "react-helmet"
@@ -9,6 +9,17 @@ import iconBackWhite from "../images/ic-back-white.svg"
 import iconMail from "../images/ic-mail.svg"
 import iconMailWhite from "../images/ic-mail-white.svg"
 import iconPlayCircle from "../images/ic-play-circle.svg"
+import iconTiktokPink from "../images/ic-tiktok-pink.svg"
+import iconCaret from "../images/ic-caret.svg"
+import iconIgPink from "../images/ic-ig-pink.svg"
+import iconTop1 from "../images/ic-top-1.png"
+import iconTop2 from "../images/ic-top-2.png"
+import iconTop3 from "../images/ic-top-3.png"
+import iconGrow1 from "../images/ic-grow-1.png"
+import iconGrow2 from "../images/ic-grow-2.png"
+import iconGrow3 from "../images/ic-grow-3.png"
+import iconGrow4 from "../images/ic-grow-4.png"
+import iconGrow5 from "../images/ic-grow-5.png"
 import imageTornado from "../images/image-tornado.svg"
 import Img from "gatsby-image"
 import scrollTo from 'gatsby-plugin-smoothscroll';
@@ -149,6 +160,10 @@ const FormLabel = styled.label`
 
 const Footer = styled.footer`
 	padding: 16px 0;
+	${Container} {
+		display: flex;
+		align-items: center;
+	}
 `
 
 const FooterLogo = styled.div`
@@ -159,6 +174,24 @@ const FooterText = styled.div`
 	font-size: 10px;
 `
 
+const FooterLeft = styled.div`
+	flex: 1 1 auto;
+`
+
+const FooterRight = styled.div`
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+`
+
+const FooterSocialLink = styled.a`
+	margin-left: 25px;
+`
+
+const FooterSocialIcon = styled.img`
+	
+`
+
 const Hero = styled.div`		
 	background: linear-gradient(135deg, #0918a4 0%, #9e2183 100%);
   background-size: 120% 120%;
@@ -167,7 +200,7 @@ const Hero = styled.div`
 	position: relative;
 	overflow: hidden;
 	@media (max-width: 768px) {
-    padding: 32px 0;
+    padding: 128px 0 32px;
   }
 	&:after {
 		content: "";
@@ -430,6 +463,10 @@ const ListItem = styled.div`
 	display:flex;
 	align-items: center;
 	margin-bottom: 24px;
+	img{
+		filter: brightness(0);
+	}
+		
 	&:last-child{
 		margin-bottom: 0;
 	}
@@ -493,6 +530,22 @@ const Works = styled.div`
 `
 
 const WorksFilter = styled.div`	
+	display: flex;
+	align-items: center;
+	@media (max-width: 768px) {
+		width: 100%;
+		margin-bottom: 20px;
+		margin-top: 15px;
+	}
+`
+
+const HeadSection = styled.div`	
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	@media (max-width: 768px) {
+		flex-wrap: wrap;
+	}	
 `
 
 const WorksAction = styled.div`
@@ -501,30 +554,14 @@ const WorksAction = styled.div`
 `
 
 const WorksListWrapper = styled.div`
-	@media (max-width: 768px) {
-		position: relative;
-		margin-left: -16px;
-		margin-right: -16px;
-		overflow-x: auto;		
-	}	
+		
 `
 
 const WorksList = styled.div`	
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 -6px;
-	@media (max-width: 768px) {
-		margin: 0;
-		flex-wrap: nowrap;
-		white-space: nowrap;
-		&:before,
-		&:after{
-			content: '';
-			display: inline-block;
-			width: 10px;
-			flex: 0 0 auto;
-		}
-	}	
+	
 `
 
 const WorksGrid = styled.div`	
@@ -532,7 +569,7 @@ const WorksGrid = styled.div`
 	width: 16.6667%;
 	padding: 6px;
 	@media (max-width: 768px) {
-		width: 43%;
+		width: 33.333%;
 	}	
 `
 
@@ -602,6 +639,28 @@ const WorksClient = styled.div`
 	line-height: 1.5;
 `
 
+const WorksImageContainer = styled.div`
+	position: relative;
+	height: 0;
+	width: 100%;
+	padding-bottom: 177.78%;	
+	margin: 0 auto;
+	@media (max-width: 768px) {
+		padding-bottom: 100%;
+	}	
+`
+
+const WorksImage = styled.img`
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+`
+
 const WorksVideo = styled.video`
 	position: absolute;
 	top: 0;
@@ -625,6 +684,84 @@ const PlayIcon = styled.i`
 	z-index: 1;
 `
 
+const Pagination = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`
+
+const PaginationText = styled.div`
+	cursor: ${props => props.disabled ? "default" : "pointer"}; 
+	font-family: Karla-Bold, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: ${props => props.disabled ? "#bdbdbd" : "#c10899"}; 
+	margin: 0 32px;
+`
+
+const PaginationNumber = styled.div`
+	cursor: ${props => props.disabled ? "default" : "pointer"};
+	margin-right: ${props => props.last ? "0" : "12px"}; 
+	font-family: Karla-Bold, sans-serif;
+	font-size: 16px;
+	line-height: 24px;
+	text-align: center;
+	width: 24px;
+	height: 24px;
+	background: ${props => props.disabled ? "#f2f2f2" : "transparent"};
+	color: ${props => props.disabled ? "#000000" : "#c10899"}; 
+`
+
+const DropdownFilter = styled.div`
+	position: relative;
+	width: 150px;
+	margin-left: 12px;
+	@media (max-width: 768px) {
+		margin-left: 0;
+		width: 100%;
+		&:first-child{
+			padding-right: 10px;
+		}
+		&:last-child{
+			padding-left: 10px;
+		}
+	}
+`
+
+const DropdownLabel = styled.div`
+	font-family: Karla-Bold, sans-serif;
+	color: #bdbdbd;	
+	font-size: 14px;
+	line-height: 20px;
+	border-bottom: 1px solid #000000;
+	background-image: url(${iconCaret});
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center right;
+`
+
+const DropdownList = styled.div`
+	border: 1px solid #bdbdbd;
+	background: #ffffff;
+	position: absolute;
+	width: 130%;
+	z-index: 3;
+	top: calc(100% + 8px);
+	display: ${props => props.open ? "block" : "none"}; 
+`
+
+const DropdownItem = styled.div`
+	font-family: Karla-Bold, sans-serif;
+	color: #000000;
+	font-size: 14px;
+	padding: 8px;
+	&:hover {
+		cursor: pointer;
+		background: #f2f2f2;
+	}
+`
+
+
 export const query = graphql`
   query TikTokQuery {
     file(relativePath: { eq: "image-thumb-tiktok.jpeg" }) {
@@ -635,6 +772,7 @@ export const query = graphql`
       }
     }
 		allPrismicTiktokVideo {
+			totalCount
 			edges {
 				node {
 					id
@@ -700,6 +838,47 @@ const Tiktok = ({ data }) => {
 	const [message, setMessage] = useState("");
 	
 	const [isScrolled, setIsScrolled] = useState(false);
+	
+	const [videosData, setVideosData] = useState(data.allPrismicTiktokVideo.edges);
+	const [videosCount, setVideosCount] = useState(data.allPrismicTiktokVideo.totalCount);
+	const [videosPerPage] = useState(12);
+	const [videosList, setVideosList] = useState([]);
+	
+	const [totalPage] = useState(Math.ceil(videosCount/videosPerPage)); 
+	const [currentPage, setCurrentPage]= useState(1);		
+	
+	const [listClient, setListClient] = useState([]);
+	
+
+	useEffect(() => {		
+		const clients = ['All'];
+		videosData.forEach( function (video) { 
+			if(!clients.includes(video.node.data.client) && video.node.data.client !== null){				
+				clients.push(video.node.data.client);
+			}			
+		});
+		setListClient(clients);	
+	}, []);
+
+	useEffect(() => {
+		const currentIndexNumber = (currentPage * videosPerPage) - videosPerPage;
+		setVideosList(videosData.slice(currentIndexNumber, currentPage * videosPerPage));		
+	}, [currentPage]);
+	
+
+	const handlePrev = () => {
+			if(currentPage === 1) return;
+			setCurrentPage(currentPage - 1);
+	}
+	
+	const handleNext = () => {
+			if(currentPage === totalPage) return;
+			setCurrentPage(currentPage + 1);
+	}
+	
+	const goToPage = (pageNumber) => {
+		setCurrentPage(pageNumber);
+	}
 
 	const contactWhatsapp = (fullname, email, message) => {
 		const templateMessage = 'Hi Naisu, my name is ' + fullname + '. I have sent you this message: ' + message + '. You can reach me through this number or via this email: ' + email + '. Cheers!';
@@ -716,16 +895,11 @@ const Tiktok = ({ data }) => {
 	}
 	
 	useScrollPosition(({ prevPos, currPos }) => {
-		console.log(currPos.x)
-		console.log(currPos.y)
-		
 		if (currPos.y < -64) {
-			console.log("masuk");
-			setIsScrolled(true)	
+			setIsScrolled(true);	
 		}
 		else{
-			console.log("nope");
-			setIsScrolled(false)	
+			setIsScrolled(false);	
 		}
 	})
 	
@@ -771,21 +945,21 @@ const Tiktok = ({ data }) => {
 			<Container>
 				<Title>Take Your Brand to The Top on TikTok</Title><br />				
 				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
+					<ListImage><img src={iconTop1} alt="Ellipse" /></ListImage>
 					<ListDescription>
 						<Subtitle violet>Skyrocketing Amount of Users in Indonesia</Subtitle>
 						<Text>53.4 million monthly active users (MAU) by Q4 2020.</Text>
 					</ListDescription>
 				</ListItem>
 				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
+					<ListImage><img src={iconTop2} alt="Ellipse" /></ListImage>
 					<ListDescription>
 						<Subtitle violet>Viewed and Recognized by Bunch of Eyes</Subtitle>
 						<Text>212.7 billion monthly video views by Q4 2020.</Text>
 					</ListDescription>
 				</ListItem>
 				<ListItem>
-					<ListImage><img src={imageEllipse} alt="Ellipse" /></ListImage>
+					<ListImage><img src={iconTop3} alt="Ellipse" /></ListImage>
 					<ListDescription>
 						<Subtitle violet>Significant Improvement of Brand Image</Subtitle>
 						<Text>87% of users see ads on TikTok shift brand image to be more open, modern, unique, creative, and interesting.</Text>
@@ -799,27 +973,27 @@ const Tiktok = ({ data }) => {
 				<Subtitle white>With A-to-Z services, let us show you how to make your marketing budget more efficient through the unique algorithm of TikTok.</Subtitle>
 				<Row>
 					<ColumnItem>
-						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<ColumnImage><img src={iconGrow1} alt="Ellipse" /></ColumnImage>
 						<Subtitle white>Campaign Strategy</Subtitle>
 						<Text white>Suggesting the most effective strategy, adjusted with the brand’s needs, including timeline distribution along with campaign objective and message. </Text>
 					</ColumnItem>
 					<ColumnItem>
-						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<ColumnImage><img src={iconGrow2} alt="Ellipse" /></ColumnImage>
 						<Subtitle white>Creative Brief</Subtitle>
 						<Text white>Creating the concept with many references, varied from the trending content to the organic ones, as well as the creative brief and guidance for KOL to do the video production.</Text>
 					</ColumnItem>
 					<ColumnItem>
-						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<ColumnImage><img src={iconGrow3} alt="Ellipse" /></ColumnImage>
 						<Subtitle white>Content Production</Subtitle>
 						<Text white>Executing the content production with the finest recording tools and equipment in a bid to visualize the creative brief.</Text>
 					</ColumnItem>
 					<ColumnItem>
-						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<ColumnImage><img src={iconGrow4} alt="Ellipse" /></ColumnImage>
 						<Subtitle white>KOL Marketing</Subtitle>
 						<Text white>Directing and supervising KOLs or influencers in making videos based on the creative brief, as well as handling the dealing process with legal work agreement.</Text>
 					</ColumnItem>
 					<ColumnItem>
-						<ColumnImage><img src={imageEllipse} alt="Ellipse" /></ColumnImage>
+						<ColumnImage><img src={iconGrow5} alt="Ellipse" /></ColumnImage>
 						<Subtitle white>Media Buying</Subtitle>
 						<Text white>Selecting the best channel of distribution on TikTok to meet the needs of the brand. </Text>
 					</ColumnItem>
@@ -828,18 +1002,37 @@ const Tiktok = ({ data }) => {
 		</Section>
 		<Section id="worksSection">
 			<Container>
-				<Title>Our Works</Title>
-				<Works>
+				<HeadSection>
+					<Title>Our Works</Title>
 					<WorksFilter>
-
+						<DropdownFilter>
+							<DropdownLabel>Newest</DropdownLabel>
+							<DropdownList>
+								<DropdownItem>Newest</DropdownItem>
+								<DropdownItem>Oldest</DropdownItem>
+							</DropdownList>
+						</DropdownFilter>
+						<DropdownFilter>
+							<DropdownLabel>All</DropdownLabel>
+							<DropdownList>
+								{listClient.map((client, index) => (
+									<DropdownItem key={index}>{client}</DropdownItem>
+								))}			
+							</DropdownList>
+					</DropdownFilter>
 					</WorksFilter>
+				</HeadSection>
+				<Works>					
 					<WorksListWrapper>
 						<WorksList>							
-							{data.allPrismicTiktokVideo.edges.map((tiktokVideo, index) => (
+							{videosList.map((tiktokVideo, index) => (
 								<WorksGrid key={index}>
 									<WorksItem to={'/tv/' + tiktokVideo.node.id} asModal>
-										<WorksThumb>											
-											<Img fluid={tiktokVideo.node.data.thumbnail_video.localFile.childImageSharp.fluid} />
+										<WorksThumb>
+											{/* <Img fluid={tiktokVideo.node.data.thumbnail_video.localFile.childImageSharp.fluid} /> */}																						
+											<WorksImageContainer>
+												<WorksImage src={tiktokVideo.node.data.embed_video.thumbnail_url}  />
+											</WorksImageContainer>
 											<WorksVideo autoPlay muted loop playsInline>
 												<source src={generateVideoSource(tiktokVideo.node.data.embed_video.embed_url)} type="video/mp4" />
 											</WorksVideo>
@@ -855,7 +1048,13 @@ const Tiktok = ({ data }) => {
 						</WorksList>
 					</WorksListWrapper>
 					<WorksAction>
-						<ButtonLink href="https://www.tiktok.com/@naisutikitoku" target="_blank">See More</ButtonLink>
+						<Pagination>
+							<PaginationText onClick={handlePrev} disabled={currentPage == 1}>Prev</PaginationText>
+							{[...Array(totalPage)].map((e, index) => (
+								<PaginationNumber onClick={() => goToPage(index+1)} key={index+1} disabled={index+1 == currentPage} last={index+1 == totalPage}>{index+1}</PaginationNumber>
+							))}		
+							<PaginationText onClick={handleNext} disabled={currentPage == totalPage}>Next</PaginationText>
+						</Pagination>						
 					</WorksAction>
 				</Works>
 			</Container>
@@ -883,8 +1082,14 @@ const Tiktok = ({ data }) => {
 		</Form>
 		<Footer>
 			<Container>
-				<FooterLogo><img src={logoNaisuBlack} alt="Logo Naisu Black" /></FooterLogo>
-				<FooterText>2020 © Naisu Studio</FooterText>
+				<FooterLeft>				
+					<FooterLogo><img src={logoNaisuBlack} alt="Logo Naisu Black" /></FooterLogo>
+					<FooterText>2020 © Naisu Studio</FooterText>
+				</FooterLeft>
+				<FooterRight>
+					<FooterSocialLink href="https://www.tiktok.com/@naisutikitoku"><FooterSocialIcon src={iconTiktokPink} /></FooterSocialLink>
+					<FooterSocialLink href="https://www.instagram.com/naisustudio"><FooterSocialIcon src={iconIgPink} /></FooterSocialLink>
+				</FooterRight>
 			</Container>
 		</Footer>
   </Layout>
