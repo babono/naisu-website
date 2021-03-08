@@ -30,6 +30,7 @@ import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
 import logoNaisuTiktokWhite from "../images/logo-naisu-tiktok-white.svg"
 import { useScrollPosition } from "@n8tb1t/use-scroll-position"
+import OutsideClickHandler from "react-outside-click-handler"
 
 const gradientAnimation = keyframes`
 	0%{background-position:0% 0%}
@@ -739,6 +740,8 @@ const DropdownLabel = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center right;
+  cursor: pointer;
+  user-select: none;
 `
 
 const DropdownList = styled.div`
@@ -748,7 +751,6 @@ const DropdownList = styled.div`
   width: 130%;
   z-index: 3;
   top: calc(100% + 8px);
-  display: ${props => (props.open ? "block" : "none")};
 `
 
 const DropdownItem = styled.div`
@@ -841,7 +843,11 @@ const Tiktok = ({ data }) => {
   const [message, setMessage] = useState("")
 
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const [isDropdownSortOpen, setIsDropdownSortOpen] = useState(false)
+  const [dropdownSort, setDropdownSort] = useState("Newest")
+  const [isDropdownCompanyOpen, setIsDropdownCompanyOpen] = useState(false)
+  const [dropdownCompany, setDropdownCompany] = useState("All")
 
   const [videosData, setVideosData] = useState(data.allPrismicTiktokVideo.edges)
   const [videosCount, setVideosCount] = useState(
@@ -850,7 +856,9 @@ const Tiktok = ({ data }) => {
   const [videosPerPage] = useState(12)
   const [videosList, setVideosList] = useState([])
 
-  const [totalPage] = useState(Math.ceil(videosCount / videosPerPage))
+  const [totalPage, setTotalPage] = useState(
+    Math.ceil(videosCount / videosPerPage)
+  )
   const [currentPage, setCurrentPage] = useState(1)
 
   const [listClient, setListClient] = useState([])
@@ -869,11 +877,46 @@ const Tiktok = ({ data }) => {
   }, [])
 
   useEffect(() => {
+    if (dropdownCompany !== "All") {
+      const filteredVideos = data.allPrismicTiktokVideo.edges.filter(function(
+        video
+      ) {
+        return video.node.data.client === dropdownCompany
+      })
+      if (dropdownSort !== "Newest") {
+        console.log("masuk")
+        filteredVideos.reverse()
+      }
+      setVideosData(filteredVideos)
+    } else {
+      console.log("mucik")
+      const filteredVideos = data.allPrismicTiktokVideo.edges.filter(function(
+        video
+      ) {
+        return video
+      })
+      if (dropdownSort !== "Newest") {
+        filteredVideos.reverse()
+      }
+      setVideosData(filteredVideos)
+    }
+  }, [dropdownCompany, dropdownSort])
+
+  useEffect(() => {
+    setCurrentPage(1)
+    setVideosCount(videosData.length)
+  }, [videosData])
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(videosCount / videosPerPage))
+  }, [videosCount])
+
+  useEffect(() => {
     const currentIndexNumber = currentPage * videosPerPage - videosPerPage
     setVideosList(
       videosData.slice(currentIndexNumber, currentPage * videosPerPage)
     )
-  }, [currentPage])
+  }, [videosData, currentPage])
 
   const handlePrev = () => {
     if (currentPage === 1) return
@@ -889,9 +932,37 @@ const Tiktok = ({ data }) => {
     setCurrentPage(pageNumber)
   }
 
-  const handleDropdown = () => {
-    if (currentPage === totalPage) return
-    setCurrentPage(currentPage + 1)
+  const closeDropdowns = () => {
+    setIsDropdownSortOpen(false)
+    setIsDropdownCompanyOpen(false)
+  }
+
+  const handleDropdownSort = () => {
+    if (!isDropdownSortOpen) {
+      closeDropdowns()
+      setIsDropdownSortOpen(true)
+    } else {
+      setIsDropdownSortOpen(false)
+    }
+  }
+
+  const handleDropdownCompany = () => {
+    if (!isDropdownCompanyOpen) {
+      closeDropdowns()
+      setIsDropdownCompanyOpen(true)
+    } else {
+      setIsDropdownCompanyOpen(false)
+    }
+  }
+
+  const handleDropdownSortItem = value => {
+    setDropdownSort(value)
+    closeDropdowns()
+  }
+
+  const handleDropdownCompanyItem = value => {
+    setDropdownCompany(value)
+    closeDropdowns()
   }
 
   const contactWhatsapp = (fullname, email, message) => {
@@ -1088,23 +1159,50 @@ const Tiktok = ({ data }) => {
         <Container>
           <HeadSection>
             <Title>Our Works</Title>
-            <WorksFilter>
-              <DropdownFilter>
-                <DropdownLabel>Newest</DropdownLabel>
-                <DropdownList>
-                  <DropdownItem>Newest</DropdownItem>
-                  <DropdownItem>Oldest</DropdownItem>
-                </DropdownList>
-              </DropdownFilter>
-              <DropdownFilter>
-                <DropdownLabel>All</DropdownLabel>
-                <DropdownList>
-                  {listClient.map((client, index) => (
-                    <DropdownItem key={index}>{client}</DropdownItem>
-                  ))}
-                </DropdownList>
-              </DropdownFilter>
-            </WorksFilter>
+            <OutsideClickHandler
+              onOutsideClick={() => {
+                closeDropdowns()
+              }}
+            >
+              <WorksFilter>
+                <DropdownFilter>
+                  <DropdownLabel onClick={() => handleDropdownSort()}>
+                    {dropdownSort}
+                  </DropdownLabel>
+                  {isDropdownSortOpen && (
+                    <DropdownList>
+                      <DropdownItem
+                        onClick={() => handleDropdownSortItem("Newest")}
+                      >
+                        Newest
+                      </DropdownItem>
+                      <DropdownItem
+                        onClick={() => handleDropdownSortItem("Oldest")}
+                      >
+                        Oldest
+                      </DropdownItem>
+                    </DropdownList>
+                  )}
+                </DropdownFilter>
+                <DropdownFilter>
+                  <DropdownLabel onClick={() => handleDropdownCompany()}>
+                    {dropdownCompany}
+                  </DropdownLabel>
+                  {isDropdownCompanyOpen && (
+                    <DropdownList>
+                      {listClient.map((client, index) => (
+                        <DropdownItem
+                          key={index}
+                          onClick={() => handleDropdownCompanyItem(client)}
+                        >
+                          {client}
+                        </DropdownItem>
+                      ))}
+                    </DropdownList>
+                  )}
+                </DropdownFilter>
+              </WorksFilter>
+            </OutsideClickHandler>
           </HeadSection>
           <Works>
             <WorksListWrapper>
