@@ -632,6 +632,7 @@ const WorksTitle = styled.div`
   font-family: Karla-Bold, sans-serif;
   line-height: 1.5;
   margin-bottom: 4px;
+  text-align: center;
 `
 
 const WorksClient = styled.div`
@@ -639,6 +640,7 @@ const WorksClient = styled.div`
   color: #ffffff;
   font-family: Karla-Regular, sans-serif;
   line-height: 1.5;
+  text-align: center;
 `
 
 const WorksImageContainer = styled.div`
