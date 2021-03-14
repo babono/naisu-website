@@ -1213,13 +1213,22 @@ const Tiktok = ({ data }) => {
                   <WorksGrid key={index}>
                     <WorksItem to={"/tv/" + tiktokVideo.node.id} asModal>
                       <WorksThumb>
-                        {/* <Img fluid={tiktokVideo.node.data.thumbnail_video.localFile.childImageSharp.fluid} /> */}
                         <WorksImageContainer>
-                          <WorksImage
-                            src={
-                              tiktokVideo.node.data.embed_video.thumbnail_url
-                            }
-                          />
+                          {tiktokVideo.node.data.thumbnail_video.localFile !==
+                          null ? (
+                            <Img
+                              fluid={
+                                tiktokVideo.node.data.thumbnail_video.localFile
+                                  .childImageSharp.fluid
+                              }
+                            />
+                          ) : (
+                            <WorksImage
+                              src={
+                                tiktokVideo.node.data.embed_video.thumbnail_url
+                              }
+                            />
+                          )}
                         </WorksImageContainer>
                         <WorksVideo autoPlay muted loop playsInline>
                           <source
