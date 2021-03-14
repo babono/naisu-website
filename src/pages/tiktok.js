@@ -734,7 +734,7 @@ const DropdownFilter = styled.div`
 
 const DropdownLabel = styled.div`
   font-family: Karla-Bold, sans-serif;
-  color: #bdbdbd;
+  color: ${props => (props.default ? "#bdbdbd" : "#000000")};
   font-size: 14px;
   line-height: 20px;
   border-bottom: 1px solid #000000;
@@ -1168,7 +1168,10 @@ const Tiktok = ({ data }) => {
             >
               <WorksFilter>
                 <DropdownFilter>
-                  <DropdownLabel onClick={() => handleDropdownSort()}>
+                  <DropdownLabel
+                    default={dropdownSort == "Newest"}
+                    onClick={() => handleDropdownSort()}
+                  >
                     {dropdownSort}
                   </DropdownLabel>
                   {isDropdownSortOpen && (
@@ -1187,7 +1190,10 @@ const Tiktok = ({ data }) => {
                   )}
                 </DropdownFilter>
                 <DropdownFilter>
-                  <DropdownLabel onClick={() => handleDropdownCompany()}>
+                  <DropdownLabel
+                    default={dropdownCompany == "All"}
+                    onClick={() => handleDropdownCompany()}
+                  >
                     {dropdownCompany}
                   </DropdownLabel>
                   {isDropdownCompanyOpen && (
