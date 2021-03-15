@@ -23,9 +23,7 @@ import iconGrow5 from "../images/ic-grow-5.svg"
 import imageTornado from "../images/image-tornado.svg"
 import Img from "gatsby-image"
 import scrollTo from "gatsby-plugin-smoothscroll"
-import imageThumbTiktok from "../images/image-thumb-tiktok.jpeg"
 import tiktokVideo from "../videos/video-tiktok.mp4"
-import imageEllipse from "../images/image-ellipse.png"
 import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
 import logoNaisuTiktokWhite from "../images/logo-naisu-tiktok-white.svg"
@@ -457,24 +455,6 @@ const Button = styled.button`
     `}
 `
 
-const ButtonLink = styled.a`
-  border: 1px solid #c10899;
-  background-color: #c10899;
-  color: #ffffff;
-  font-family: Moderat-Bold, sans-serif;
-  font-size: 14px;
-  padding: 6px 40px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
-  display: inline-block;
-  &:hover,
-  &:active {
-    transform: translatey(-3px);
-    box-shadow: 0 5px 5px -5px #742488;
-  }
-`
-
 const ListItem = styled.div`
   display: flex;
   align-items: center;
@@ -544,6 +524,7 @@ const WorksFilter = styled.div`
     width: 100%;
     margin-bottom: 20px;
     margin-top: 15px;
+    min-width: calc(100vw - 52px);
   }
 `
 
@@ -703,6 +684,16 @@ const PaginationText = styled.div`
   margin: 0 32px;
 `
 
+const PaginationInfo = styled.div`
+  display: none;
+  font-family: Karla-Bold, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  @media (max-width: 768px) {
+    display: block;
+  }
+`
+
 const PaginationNumber = styled.div`
   cursor: ${props => (props.disabled ? "default" : "pointer")};
   margin-right: ${props => (props.last ? "0" : "12px")};
@@ -714,6 +705,10 @@ const PaginationNumber = styled.div`
   height: 24px;
   background: ${props => (props.disabled ? "#f2f2f2" : "transparent")};
   color: ${props => (props.disabled ? "#000000" : "#c10899")};
+  display: block;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 
 const DropdownFilter = styled.div`
@@ -753,6 +748,9 @@ const DropdownList = styled.div`
   width: 130%;
   z-index: 3;
   top: calc(100% + 8px);
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 const DropdownItem = styled.div`
@@ -815,29 +813,6 @@ export const query = graphql`
     }
   }
 `
-
-const LoopWorks = ({ file }) => {
-  var rows = []
-  for (var i = 0; i < 12; i++) {
-    rows.push(
-      <WorksGrid key={i}>
-        <WorksItem
-          target="_blank"
-          href="https://www.tiktok.com/@naisutikitoku/video/6844478080329846017"
-        >
-          <WorksThumb>
-            <Img fluid={file} alt="Thumbnail asoy" />
-            <WorksVideo autoPlay muted loop playsInline>
-              <source src={tiktokVideo} type="video/mp4" />
-            </WorksVideo>
-          </WorksThumb>
-          <PlayIcon />
-        </WorksItem>
-      </WorksGrid>
-    )
-  }
-  return rows
-}
 
 const Tiktok = ({ data }) => {
   const [fullname, setFullName] = useState("")
@@ -1169,7 +1144,7 @@ const Tiktok = ({ data }) => {
               <WorksFilter>
                 <DropdownFilter>
                   <DropdownLabel
-                    default={dropdownSort == "Newest"}
+                    default={dropdownSort === "Newest"}
                     onClick={() => handleDropdownSort()}
                   >
                     {dropdownSort}
@@ -1191,7 +1166,7 @@ const Tiktok = ({ data }) => {
                 </DropdownFilter>
                 <DropdownFilter>
                   <DropdownLabel
-                    default={dropdownCompany == "All"}
+                    default={dropdownCompany === "All"}
                     onClick={() => handleDropdownCompany()}
                   >
                     {dropdownCompany}
@@ -1263,23 +1238,26 @@ const Tiktok = ({ data }) => {
               <Pagination>
                 <PaginationText
                   onClick={handlePrev}
-                  disabled={currentPage == 1}
+                  disabled={currentPage === 1}
                 >
                   Prev
                 </PaginationText>
+                <PaginationInfo>
+                  Page {currentPage} of {totalPage}
+                </PaginationInfo>
                 {[...Array(totalPage)].map((e, index) => (
                   <PaginationNumber
                     onClick={() => goToPage(index + 1)}
                     key={index + 1}
-                    disabled={index + 1 == currentPage}
-                    last={index + 1 == totalPage}
+                    disabled={index + 1 === currentPage}
+                    last={index + 1 === totalPage}
                   >
                     {index + 1}
                   </PaginationNumber>
                 ))}
                 <PaginationText
                   onClick={handleNext}
-                  disabled={currentPage == totalPage}
+                  disabled={currentPage === totalPage}
                 >
                   Next
                 </PaginationText>
