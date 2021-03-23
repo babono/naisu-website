@@ -8,6 +8,7 @@ import Img from "gatsby-image"
 import styled from "styled-components"
 import { createGlobalStyle } from "styled-components"
 import imageIntro from "../images/image-introducing.svg"
+import ogNaisu from "../images/og-naisu.png"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
 import Helmet from "react-helmet"
 
@@ -81,14 +82,14 @@ const IntroText3 = styled.div`
     font-size: 26px;
     font-family: Moderat-Black, sans-serif;
   }
-  em{
+  em {
     color: #eae441;
     font-family: Moderat-Black, sans-serif;
     font-style: normal;
   }
   @media (max-width: 768px) {
     font-size: 18px;
-    strong{
+    strong {
       font-size: 18px;
     }
   }
@@ -393,84 +394,83 @@ const WorksItem = styled(Link)`
 
 export const query = graphql`
   query HomeQuery {
-      allPrismicSections {
-        edges {
-          node {
-            data {
-              background_image_section_1 {                
-                url
-              }
-              text_section_1 {
+    allPrismicSections {
+      edges {
+        node {
+          data {
+            background_image_section_1 {
+              url
+            }
+            text_section_1 {
+              text
+            }
+            background_image_section_2 {
+              url
+            }
+            image_text_section_2 {
+              url
+            }
+            text_section_2 {
+              text
+            }
+            background_image_section_3 {
+              url
+            }
+            text_section_3 {
+              raw
+            }
+          }
+        }
+      }
+    }
+    allPrismicReach {
+      edges {
+        node {
+          data {
+            title {
+              text
+            }
+            address {
+              raw
+            }
+            email {
+              raw
+            }
+            phone {
+              raw
+            }
+            social {
+              name {
                 text
               }
-              background_image_section_2 {
+              icon {
                 url
               }
-              image_text_section_2 {
+              link {
                 url
-              }
-              text_section_2 {
-                text
-              }
-              background_image_section_3 {
-                url
-              }
-              text_section_3 {
-                raw
               }
             }
           }
         }
       }
-      allPrismicReach {
-        edges {
-          node {
-            data {
-              title {
-                text
-              }
-              address {
-                raw
-              }
-              email {
-                raw
-              }
-              phone {
-                raw
-              }
-              social {
-                name {
-                  text
-                }
-                icon {
-                  url
-                }
-                link {
-                  url
-                }
-              }
+    }
+    allPrismicWorks(sort: { fields: data___order }) {
+      edges {
+        node {
+          uid
+          data {
+            title {
+              text
             }
-          }
-        }
-      }
-      allPrismicWorks(sort: {fields: data___order}) {
-        edges {
-          node {
-            uid
-            data {
-              title {
-                text
-              }
-              image_thumbnail {
-                alt
-                copyright
-                url
-                thumbnails
-                localFile {
-                  childImageSharp {
-                    fluid(maxWidth: 835, quality: 100) {
-                      ...GatsbyImageSharpFluid_withWebp
-                    }
+            image_thumbnail {
+              alt
+              copyright
+              url
+              thumbnails
+              localFile {
+                childImageSharp {
+                  fluid(maxWidth: 835, quality: 100) {
+                    ...GatsbyImageSharpFluid_withWebp
                   }
                 }
               }
@@ -478,13 +478,16 @@ export const query = graphql`
           }
         }
       }
+    }
   }
 `
 
 const RenderWorkList = ({ works }) => {
   return works.map(item => (
     <WorksItem key={item.node.uid} to={"/w/" + item.node.uid}>
-      <Img fluid={item.node.data.image_thumbnail.localFile.childImageSharp.fluid} />
+      <Img
+        fluid={item.node.data.image_thumbnail.localFile.childImageSharp.fluid}
+      />
       <WorksInfo>{item.node.data.title.text}</WorksInfo>
     </WorksItem>
   ))
@@ -508,7 +511,15 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title="Hello | Naisu Studio" />
+      <Helmet>
+        <title>Hello There | Naisu Studio</title>
+        <meta property="og:title" content="Beef Up Your Brand with Naisu" />
+        <meta
+          property="og:description"
+          content="Advertise better and earn more with the most effective-yet-efficient way!"
+        />
+        <meta property="og:image" content={ogNaisu} />
+      </Helmet>
       <BgStyle
         bgImageHome={doc2.node.data.background_image_section_1.url}
         bgImageIntro={doc2.node.data.background_image_section_2.url}
@@ -537,9 +548,7 @@ export default ({ data }) => {
             <ReactFullpage.Wrapper>
               <section className="section">
                 <Container>
-                  <IntroText1>
-                    {doc2.node.data.text_section_1.text}
-                  </IntroText1>
+                  <IntroText1>{doc2.node.data.text_section_1.text}</IntroText1>
                 </Container>
               </section>
               <section className="section">
@@ -548,9 +557,7 @@ export default ({ data }) => {
                     src={doc2.node.data.image_text_section_2.url}
                     alt="image introducing"
                   />
-                  <IntroText2>
-                    {doc2.node.data.text_section_2.text}
-                  </IntroText2>
+                  <IntroText2>{doc2.node.data.text_section_2.text}</IntroText2>
                 </Container>
               </section>
               <section className="section">
@@ -571,13 +578,9 @@ export default ({ data }) => {
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
-                      <AddressTitle>
-                        {doc3.node.data.title.text}
-                      </AddressTitle>
+                      <AddressTitle>{doc3.node.data.title.text}</AddressTitle>
                       <AddressDetail>
-                        <RichText
-                          render={doc3.node.data.address.raw}                          
-                        />
+                        <RichText render={doc3.node.data.address.raw} />
                       </AddressDetail>
                       <ContactText>
                         {RichText.asText(doc3.node.data.email.raw)}

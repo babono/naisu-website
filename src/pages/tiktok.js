@@ -21,6 +21,7 @@ import iconGrow3 from "../images/ic-grow-3.svg"
 import iconGrow4 from "../images/ic-grow-4.svg"
 import iconGrow5 from "../images/ic-grow-5.svg"
 import imageTornado from "../images/image-tornado.svg"
+import ogTiktok from "../images/og-tiktok.png"
 import Img from "gatsby-image"
 import scrollTo from "gatsby-plugin-smoothscroll"
 import tiktokVideo from "../videos/video-tiktok.mp4"
@@ -984,7 +985,15 @@ const Tiktok = ({ data }) => {
 
   return (
     <Layout>
-      <Helmet title="Supercharge your TikTok with Us | Naisu Studio" />
+      <Helmet>
+        <title>Beef Up Your TikTok with Naisu | Naisu Studio</title>
+        <meta property="og:title" content="Beef Up Your TikTok with Naisu" />
+        <meta
+          property="og:description"
+          content="Advertise better and earn more with the most effective-yet-efficient way!"
+        />
+        <meta property="og:image" content={ogTiktok} />
+      </Helmet>
       <Nav>
         <Container>
           <NavContent>
