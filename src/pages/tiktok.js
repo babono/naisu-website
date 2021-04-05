@@ -21,10 +21,10 @@ import iconGrow3 from "../images/ic-grow-3.svg"
 import iconGrow4 from "../images/ic-grow-4.svg"
 import iconGrow5 from "../images/ic-grow-5.svg"
 import imageTornado from "../images/image-tornado.svg"
+import placeholderThumb from "../images/image-thumb-placeholder.png"
 import ogTiktok from "../images/og-tiktok.png"
 import Img from "gatsby-image"
 import scrollTo from "gatsby-plugin-smoothscroll"
-import tiktokVideo from "../videos/video-tiktok.mp4"
 import logoNaisuBlack from "../images/logo-naisu-black.svg"
 import logoNaisuTiktok from "../images/logo-naisu-tiktok.svg"
 import logoNaisuTiktokWhite from "../images/logo-naisu-tiktok-white.svg"
@@ -653,7 +653,6 @@ const WorksVideo = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
-  display: none;
   z-index: 1;
 `
 
@@ -852,7 +851,7 @@ const Tiktok = ({ data }) => {
       }
     })
     setListClient(clients)
-  }, [])
+  }, [videosData])
 
   useEffect(() => {
     if (dropdownCompany !== "All") {
@@ -878,7 +877,7 @@ const Tiktok = ({ data }) => {
       }
       setVideosData(filteredVideos)
     }
-  }, [dropdownCompany, dropdownSort])
+  }, [data.allPrismicTiktokVideo.edges, dropdownCompany, dropdownSort])
 
   useEffect(() => {
     setCurrentPage(1)
@@ -887,14 +886,14 @@ const Tiktok = ({ data }) => {
 
   useEffect(() => {
     setTotalPage(Math.ceil(videosCount / videosPerPage))
-  }, [videosCount])
+  }, [videosPerPage, videosCount])
 
   useEffect(() => {
     const currentIndexNumber = currentPage * videosPerPage - videosPerPage
     setVideosList(
       videosData.slice(currentIndexNumber, currentPage * videosPerPage)
     )
-  }, [videosData, currentPage])
+  }, [videosPerPage, videosData, currentPage])
 
   const handlePrev = () => {
     if (currentPage === 1) return
@@ -1152,10 +1151,7 @@ const Tiktok = ({ data }) => {
             >
               <WorksFilter>
                 <DropdownFilter>
-                  <DropdownLabel
-                    default={dropdownSort === "Newest"}
-                    onClick={() => handleDropdownSort()}
-                  >
+                  <DropdownLabel onClick={() => handleDropdownSort()}>
                     {dropdownSort}
                   </DropdownLabel>
                   {isDropdownSortOpen && (
@@ -1174,10 +1170,7 @@ const Tiktok = ({ data }) => {
                   )}
                 </DropdownFilter>
                 <DropdownFilter>
-                  <DropdownLabel
-                    default={dropdownCompany === "All"}
-                    onClick={() => handleDropdownCompany()}
-                  >
+                  <DropdownLabel onClick={() => handleDropdownCompany()}>
                     {dropdownCompany}
                   </DropdownLabel>
                   {isDropdownCompanyOpen && (
@@ -1213,11 +1206,7 @@ const Tiktok = ({ data }) => {
                               }
                             />
                           ) : (
-                            <WorksImage
-                              src={
-                                tiktokVideo.node.data.embed_video.thumbnail_url
-                              }
-                            />
+                            <WorksImage src={placeholderThumb} />
                           )}
                         </WorksImageContainer>
                         <WorksVideo autoPlay muted loop playsInline>

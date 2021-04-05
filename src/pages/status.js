@@ -64,8 +64,15 @@ const Status = () => (
       <Container>
         <Title>Deployment Status</Title>
         <Subtitle>Production Environment.</Subtitle>
-        <a href="https://app.netlify.com/sites/naisu/deploys" target="_blank">
-          <img src="https://api.netlify.com/api/v1/badges/615e7c38-42a0-4cbe-a13a-4cd64df5bfd4/deploy-status" />
+        <a
+          href="https://app.netlify.com/sites/naisu/deploys"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img
+            alt=""
+            src="https://api.netlify.com/api/v1/badges/615e7c38-42a0-4cbe-a13a-4cd64df5bfd4/deploy-status"
+          />
         </a>
         <ButtonWrapper>
           <Button to="/">Back to Home</Button>

@@ -7,7 +7,6 @@ import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
 import { createGlobalStyle } from "styled-components"
-import imageIntro from "../images/image-introducing.svg"
 import ogNaisu from "../images/og-naisu.png"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
 import Helmet from "react-helmet"
@@ -28,14 +27,6 @@ const BgStyle = createGlobalStyle`
   html.fp-enabled body.fp-viewing-about:before {
     background-image: url(${props => props.bgImageAbout});
   }
-`
-
-const BgImage = styled.img`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-transition: all 0.5s linear;
-  transition: all 0.5s linear;
 `
 
 const IntroImage = styled.img`
@@ -491,14 +482,6 @@ const RenderWorkList = ({ works }) => {
       <WorksInfo>{item.node.data.title.text}</WorksInfo>
     </WorksItem>
   ))
-}
-
-const linkResolver = doc => {
-  // Pretty URLs for known types
-  if (doc.type === "blog") return `/post/${doc.uid}`
-  if (doc.type === "page") return `/${doc.uid}`
-  // Fallback for other types, in case new custom types get created
-  return `/doc/${doc.id}`
 }
 
 export default ({ data }) => {
