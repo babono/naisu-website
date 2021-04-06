@@ -220,7 +220,7 @@ const FormRow = styled.div`
 
 const FormLabel = styled.label`
   width: 100px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
   font-size: 16px;
   letter-spacing: 0.1em;
   font-family: Moderat-Bold, sans-serif;
@@ -252,7 +252,7 @@ const RadioButton = styled.div`
 `
 
 const InputText = styled.input`
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 1);
   width: 100%;
   background-color: transparent;
   color: #ffffff;
@@ -264,7 +264,7 @@ const InputText = styled.input`
 `
 
 const TextArea = styled.textarea`
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 1);
   width: 100%;
   background-color: transparent;
   color: #ffffff;
