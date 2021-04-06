@@ -21,7 +21,6 @@ import iconGrow3 from "../images/ic-grow-3.svg"
 import iconGrow4 from "../images/ic-grow-4.svg"
 import iconGrow5 from "../images/ic-grow-5.svg"
 import imageTornado from "../images/image-tornado.svg"
-import placeholderThumb from "../images/image-thumb-placeholder.png"
 import ogTiktok from "../images/og-tiktok.png"
 import Img from "gatsby-image"
 import scrollTo from "gatsby-plugin-smoothscroll"
@@ -631,6 +630,7 @@ const WorksImageContainer = styled.div`
   width: 100%;
   padding-bottom: 177.78%;
   margin: 0 auto;
+  overflow: hidden;
   @media (max-width: 768px) {
     padding-bottom: 100%;
   }
@@ -638,12 +638,11 @@ const WorksImageContainer = styled.div`
 
 const WorksImage = styled.img`
   position: absolute;
-  top: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   width: 100%;
   height: 100%;
+  transform: scale(1.03);
   object-fit: cover;
 `
 
@@ -653,6 +652,7 @@ const WorksVideo = styled.video`
   left: 0;
   width: 100%;
   height: 100%;
+  display: none;
   z-index: 1;
 `
 
@@ -851,7 +851,7 @@ const Tiktok = ({ data }) => {
       }
     })
     setListClient(clients)
-  }, [videosData])
+  }, [])
 
   useEffect(() => {
     if (dropdownCompany !== "All") {
@@ -877,7 +877,7 @@ const Tiktok = ({ data }) => {
       }
       setVideosData(filteredVideos)
     }
-  }, [data.allPrismicTiktokVideo.edges, dropdownCompany, dropdownSort])
+  }, [dropdownCompany, dropdownSort])
 
   useEffect(() => {
     setCurrentPage(1)
@@ -886,14 +886,14 @@ const Tiktok = ({ data }) => {
 
   useEffect(() => {
     setTotalPage(Math.ceil(videosCount / videosPerPage))
-  }, [videosPerPage, videosCount])
+  }, [videosCount])
 
   useEffect(() => {
     const currentIndexNumber = currentPage * videosPerPage - videosPerPage
     setVideosList(
       videosData.slice(currentIndexNumber, currentPage * videosPerPage)
     )
-  }, [videosPerPage, videosData, currentPage])
+  }, [videosData, currentPage])
 
   const handlePrev = () => {
     if (currentPage === 1) return
@@ -979,6 +979,15 @@ const Tiktok = ({ data }) => {
         "https://drive.google.com/uc?export=download&id=" + split[5]
 
       return videoSourceUrl
+    }
+  }
+
+  const generateThumbnailSource = thumbnailUrl => {
+    if (thumbnailUrl) {
+      const widthChanged = thumbnailUrl.replace("w1200", "w540")
+      const heightChanged = widthChanged.replace("h630", "h960")
+
+      return heightChanged
     }
   }
 
@@ -1206,17 +1215,23 @@ const Tiktok = ({ data }) => {
                               }
                             />
                           ) : (
-                            <WorksImage src={placeholderThumb} />
+                            <WorksImage
+                              src={generateThumbnailSource(
+                                tiktokVideo.node.data.embed_video.thumbnail_url
+                              )}
+                            />
                           )}
                         </WorksImageContainer>
-                        <WorksVideo autoPlay muted loop playsInline>
-                          <source
-                            src={generateVideoSource(
-                              tiktokVideo.node.data.embed_video.embed_url
-                            )}
-                            type="video/mp4"
-                          />
-                        </WorksVideo>
+                        <WorksVideo
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          key={index}
+                          src={generateVideoSource(
+                            tiktokVideo.node.data.embed_video.embed_url
+                          )}
+                        />
                       </WorksThumb>
                       <PlayIcon />
                       <WorksInfo>
