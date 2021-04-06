@@ -39,7 +39,7 @@ export const query = graphql`
 `
 
 const VideoMain = styled.div`
-  max-width: 450px;
+  max-width: 320px;
   margin: 0 auto;
 `
 
