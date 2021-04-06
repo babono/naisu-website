@@ -12,7 +12,7 @@ import SEO from "../components/seo"
 
 export const query = graphql`
   query PageQuery($uid: String) {
-    allPrismicWorks(filter: {uid: {eq: $uid}}) {
+    allPrismicWorks(filter: { uid: { eq: $uid } }) {
       edges {
         node {
           data {
@@ -48,12 +48,12 @@ export const query = graphql`
           }
         }
       }
-    }    
+    }
   }
 `
 
 const ActionWrapper = styled.div`
-  margin-bottom: 120px;
+  margin-bottom: 6vh;
 `
 
 const ButtonClose = styled.a`
@@ -166,7 +166,8 @@ const ContainerHero = styled.div`
 `
 
 const CompanyLogo = styled.img`
-  margin-bottom: 20px;
+  margin: 5vh auto;
+  height: 25vh;
 `
 
 const Copyright = styled.div`
@@ -185,7 +186,7 @@ const Hero = styled(BackgroundImage)`
 `
 
 const ProjectCategory = styled.div`
-  margin-bottom: 48px;
+  margin-bottom: 3vh;
 `
 
 const ProjectCategoryItem = styled.span`
@@ -224,7 +225,7 @@ const ProjectTitle = styled.h1`
 const ProjectDescription = styled.div`
   font-size: 16px;
   color: #ffffff;
-  margin-bottom: 64px;
+  margin-bottom: 5vh;
 `
 
 const Works = props => {
