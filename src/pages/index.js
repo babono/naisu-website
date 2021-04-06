@@ -311,7 +311,7 @@ const SocialIcon = styled.img`
 `
 
 const SocialItem = styled.a`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: #ffffff;
   text-decoration: none;
@@ -574,10 +574,12 @@ export default ({ data }) => {
                       <Social>
                         <SocialTitle>Our Social</SocialTitle>
                         {doc3.node.data.social.map(social => (
-                          <SocialItem href={social.link.url}>
-                            <SocialIcon src={social.icon.url} />
-                            <SocialName>{social.name.text}</SocialName>
-                          </SocialItem>
+                          <div>
+                            <SocialItem href={social.link.url}>
+                              <SocialIcon src={social.icon.url} />
+                              <SocialName>{social.name.text}</SocialName>
+                            </SocialItem>
+                          </div>
                         ))}
                       </Social>
                     </ContactInfo>
