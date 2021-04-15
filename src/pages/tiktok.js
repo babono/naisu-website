@@ -227,6 +227,7 @@ const Form = styled.section`
   animation: ${gradientAnimation} 5s ease infinite;
   padding: 60px 0;
   position: relative;
+  overflow: hidden;
   &:after {
     content: "";
     position: absolute;
