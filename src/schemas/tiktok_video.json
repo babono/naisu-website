@@ -1,0 +1,34 @@
+{
+	  "Main" : {
+		"title_video" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "heading1",
+			"label" : "title video"
+		  }
+		},
+		"client" : {
+		  "type" : "Select",
+		  "config" : {
+			"options" : [ "Buku Warung", "By.U", "Flip", "Gojek", "Lingokids", "Pomelo", "Shopback", "Sephora", "Tokopedia", "Zalora", "Zenius" ],
+			"label" : "client",
+			"placeholder" : "Client"
+		  }
+		},
+		"embed_video" : {
+		  "type" : "Embed",
+		  "config" : {
+			"label" : "Embed Video",
+			"placeholder" : "Link Video"
+		  }
+		},
+		"thumbnail_video" : {
+		  "type" : "Image",
+		  "config" : {
+			"constraint" : { },
+			"thumbnails" : [ ],
+			"label" : "thumbnail Video"
+		  }
+		}
+	  }
+	}

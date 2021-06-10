@@ -1,0 +1,62 @@
+{
+	  "Main" : {
+		"title" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+			"label" : "title"
+		  }
+		},
+		"address" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"multi" : "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, o-list-item",
+			"label" : "address"
+		  }
+		},
+		"email" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"multi" : "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, o-list-item",
+			"label" : "email"
+		  }
+		},
+		"phone" : {
+		  "type" : "StructuredText",
+		  "config" : {
+			"multi" : "paragraph, preformatted, heading1, heading2, heading3, heading4, heading5, heading6, strong, em, hyperlink, image, embed, list-item, o-list-item, o-list-item",
+			"label" : "phone"
+		  }
+		},
+		"social" : {
+		  "type" : "Group",
+		  "config" : {
+			"fields" : {
+			  "icon" : {
+				"type" : "Image",
+				"config" : {
+				  "constraint" : { },
+				  "thumbnails" : [ ],
+				  "label" : "icon"
+				}
+			  },
+			  "name" : {
+				"type" : "StructuredText",
+				"config" : {
+				  "single" : "heading1, heading2, heading3, heading4, heading5, heading6",
+				  "label" : "name"
+				}
+			  },
+			  "link" : {
+				"type" : "Link",
+				"config" : {
+				  "allowTargetBlank" : true,
+				  "label" : "link"
+				}
+			  }
+			},
+			"label" : "social"
+		  }
+		}
+	  }
+	}

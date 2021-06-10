@@ -7,7 +7,7 @@ import { graphql } from "gatsby"
 import Img from "gatsby-image"
 import styled from "styled-components"
 import { createGlobalStyle } from "styled-components"
-import imageIntro from "../images/image-introducing.svg"
+import ogNaisu from "../images/og-naisu.png"
 import logoNaisuWhite from "../images/logo-naisu-white.svg"
 import Helmet from "react-helmet"
 
@@ -27,14 +27,6 @@ const BgStyle = createGlobalStyle`
   html.fp-enabled body.fp-viewing-about:before {
     background-image: url(${props => props.bgImageAbout});
   }
-`
-
-const BgImage = styled.img`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-transition: all 0.5s linear;
-  transition: all 0.5s linear;
 `
 
 const IntroImage = styled.img`
@@ -81,14 +73,14 @@ const IntroText3 = styled.div`
     font-size: 26px;
     font-family: Moderat-Black, sans-serif;
   }
-  em{
+  em {
     color: #eae441;
     font-family: Moderat-Black, sans-serif;
     font-style: normal;
   }
   @media (max-width: 768px) {
     font-size: 18px;
-    strong{
+    strong {
       font-size: 18px;
     }
   }
@@ -228,7 +220,7 @@ const FormRow = styled.div`
 
 const FormLabel = styled.label`
   width: 100px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 1);
   font-size: 16px;
   letter-spacing: 0.1em;
   font-family: Moderat-Bold, sans-serif;
@@ -260,7 +252,7 @@ const RadioButton = styled.div`
 `
 
 const InputText = styled.input`
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 1);
   width: 100%;
   background-color: transparent;
   color: #ffffff;
@@ -272,7 +264,7 @@ const InputText = styled.input`
 `
 
 const TextArea = styled.textarea`
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 1);
   width: 100%;
   background-color: transparent;
   color: #ffffff;
@@ -319,7 +311,7 @@ const SocialIcon = styled.img`
 `
 
 const SocialItem = styled.a`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   color: #ffffff;
   text-decoration: none;
@@ -393,77 +385,84 @@ const WorksItem = styled(Link)`
 
 export const query = graphql`
   query HomeQuery {
-    prismic {
-      allSectionss {
-        edges {
-          node {
-            background_image_section_1
-            background_image_section_1Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
+    allPrismicSections {
+      edges {
+        node {
+          data {
+            background_image_section_1 {
+              url
             }
-            text_section_1
-            background_image_section_2
-            background_image_section_2Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
+            text_section_1 {
+              text
             }
-            image_text_section_2
-            text_section_2
-            background_image_section_3
-            background_image_section_3Sharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
+            background_image_section_2 {
+              url
             }
-            text_section_3
-            _linkType
+            image_text_section_2 {
+              url
+            }
+            text_section_2 {
+              text
+            }
+            background_image_section_3 {
+              url
+            }
+            text_section_3 {
+              raw
+            }
           }
         }
       }
-      allReachs {
-        edges {
-          node {
-            title
-            address
-            email
-            phone
+    }
+    allPrismicReach {
+      edges {
+        node {
+          data {
+            title {
+              text
+            }
+            address {
+              raw
+            }
+            email {
+              raw
+            }
+            phone {
+              raw
+            }
             social {
-              name
-              icon
+              name {
+                text
+              }
+              icon {
+                url
+              }
               link {
-                _linkType
-                ... on PRISMIC__ExternalLink {
-                  _linkType
-                  url
-                }
+                url
               }
             }
-
-            _linkType
           }
         }
       }
-      allWorkss(sortBy: order_ASC) {
-        edges {
-          node {
-            title
-            _meta {
-              uid
+    }
+    allPrismicWorks(sort: { fields: data___order }) {
+      edges {
+        node {
+          uid
+          data {
+            title {
+              text
             }
-            image_thumbnail
-            image_thumbnailSharp {
-              childImageSharp {
-                fluid(maxWidth: 835, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
+            image_thumbnail {
+              alt
+              copyright
+              url
+              thumbnails
+              localFile {
+                childImageSharp {
+                  fluid(maxWidth: 835, quality: 100) {
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
                 }
               }
             }
@@ -476,41 +475,39 @@ export const query = graphql`
 
 const RenderWorkList = ({ works }) => {
   return works.map(item => (
-    <WorksItem key={item.node._meta.uid} to={"/w/" + item.node._meta.uid}>
-      <Img fluid={item.node.image_thumbnailSharp.childImageSharp.fluid} />
-      <WorksInfo>{RichText.asText(item.node.title)}</WorksInfo>
+    <WorksItem key={item.node.uid} to={"/w/" + item.node.uid}>
+      <Img
+        fluid={item.node.data.image_thumbnail.localFile.childImageSharp.fluid}
+      />
+      <WorksInfo>{item.node.data.title.text}</WorksInfo>
     </WorksItem>
   ))
 }
 
-const linkResolver = doc => {
-  // Pretty URLs for known types
-  if (doc.type === "blog") return `/post/${doc.uid}`
-  if (doc.type === "page") return `/${doc.uid}`
-  // Fallback for other types, in case new custom types get created
-  return `/doc/${doc.id}`
-}
-
 export default ({ data }) => {
-  const doc = data.prismic.allWorkss.edges.slice(0, 1).pop()
-  const doc2 = data.prismic.allSectionss.edges.slice(0, 1).pop()
-  const doc3 = data.prismic.allReachs.edges.slice(0, 1).pop()
+  const doc = data.allPrismicWorks.edges.slice(0, 1).pop()
+  const doc2 = data.allPrismicSections.edges.slice(0, 1).pop()
+  const doc3 = data.allPrismicReach.edges.slice(0, 1).pop()
   if (!doc || !doc2 || !doc3) return null
 
   const [contactTopic, setContactTopic] = useState("Business")
 
   return (
     <Layout>
-      <Helmet title="Hello | Naisu Studio" />
+      <Helmet>
+        <title>Hello There | Naisu Studio</title>
+        <meta property="og:title" content="Beef Up Your Brand with Naisu" />
+        <meta
+          property="og:description"
+          content="Advertise better and earn more with the most effective-yet-efficient way!"
+        />
+        <meta property="og:image" content={ogNaisu} />
+      </Helmet>
       <BgStyle
-        bgImageHome={doc2.node.background_image_section_1.url}
-        bgImageIntro={doc2.node.background_image_section_2.url}
-        bgImageAbout={doc2.node.background_image_section_3.url}
+        bgImageHome={doc2.node.data.background_image_section_1.url}
+        bgImageIntro={doc2.node.data.background_image_section_2.url}
+        bgImageAbout={doc2.node.data.background_image_section_3.url}
       />
-      {/* <BgImage bgImageHome={doc2.node.background_image_section_1.url}
-        src=
-        alt="image introducing"
-      /> */}
       <Header>
         <HeaderContainer>
           <HeaderMenu id="menu">
@@ -534,33 +531,29 @@ export default ({ data }) => {
             <ReactFullpage.Wrapper>
               <section className="section">
                 <Container>
-                  <IntroText1>
-                    {RichText.asText(doc2.node.text_section_1)}
-                  </IntroText1>
+                  <IntroText1>{doc2.node.data.text_section_1.text}</IntroText1>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroImage
-                    src={doc2.node.image_text_section_2.url}
+                    src={doc2.node.data.image_text_section_2.url}
                     alt="image introducing"
                   />
-                  <IntroText2>
-                    {RichText.asText(doc2.node.text_section_2)}
-                  </IntroText2>
+                  <IntroText2>{doc2.node.data.text_section_2.text}</IntroText2>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroText3>
-                    {RichText.render(doc2.node.text_section_3)}
+                    {RichText.render(doc2.node.data.text_section_3.raw)}
                   </IntroText3>
                 </Container>
               </section>
               <section className="section bgBlue">
                 <Container>
                   <WorksWrapper>
-                    <RenderWorkList works={data.prismic.allWorkss.edges} />
+                    <RenderWorkList works={data.allPrismicWorks.edges} />
                   </WorksWrapper>
                 </Container>
               </section>
@@ -568,30 +561,25 @@ export default ({ data }) => {
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
-                      <AddressTitle>
-                        {RichText.asText(doc3.node.title)}
-                      </AddressTitle>
+                      <AddressTitle>{doc3.node.data.title.text}</AddressTitle>
                       <AddressDetail>
-                        <RichText
-                          render={doc3.node.address}
-                          linkResolver={linkResolver}
-                        />
+                        <RichText render={doc3.node.data.address.raw} />
                       </AddressDetail>
                       <ContactText>
-                        {RichText.asText(doc3.node.email)}
+                        {RichText.asText(doc3.node.data.email.raw)}
                       </ContactText>
                       <ContactText>
-                        {RichText.asText(doc3.node.phone)}
+                        {RichText.asText(doc3.node.data.phone.raw)}
                       </ContactText>
                       <Social>
                         <SocialTitle>Our Social</SocialTitle>
-                        {doc3.node.social.map(social => (
-                          <SocialItem href={social.link.url}>
-                            <SocialIcon src={social.icon.url} />
-                            <SocialName>
-                              {RichText.asText(social.name)}
-                            </SocialName>
-                          </SocialItem>
+                        {doc3.node.data.social.map(social => (
+                          <div>
+                            <SocialItem href={social.link.url}>
+                              <SocialIcon src={social.icon.url} />
+                              <SocialName>{social.name.text}</SocialName>
+                            </SocialItem>
+                          </div>
                         ))}
                       </Social>
                     </ContactInfo>

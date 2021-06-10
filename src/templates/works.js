@@ -12,31 +12,38 @@ import SEO from "../components/seo"
 
 export const query = graphql`
   query PageQuery($uid: String) {
-    prismic {
-      allWorkss(uid: $uid) {
-        edges {
-          node {
-            title
-            project_description
-            logo_company
-            header_image
-            header_imageSharp {
-              childImageSharp {
-                fluid(maxWidth: 2660, quality: 100) {
-                  ...GatsbyImageSharpFluid_withWebp
+    allPrismicWorks(filter: { uid: { eq: $uid } }) {
+      edges {
+        node {
+          data {
+            title {
+              text
+            }
+            project_description {
+              text
+            }
+            logo_company {
+              url
+            }
+            header_image {
+              localFile {
+                childImageSharp {
+                  fluid(maxWidth: 2660, webpQuality: 100) {
+                    ...GatsbyImageSharpFluid_withWebp
+                  }
                 }
               }
             }
             link_website {
-              _linkType
-              ... on PRISMIC__ExternalLink {
-                _linkType
-                url
-              }
+              url
             }
             category {
-              category_description
-              category_name
+              category_description {
+                raw
+              }
+              category_name {
+                text
+              }
             }
           }
         }
@@ -46,7 +53,7 @@ export const query = graphql`
 `
 
 const ActionWrapper = styled.div`
-  margin-bottom: 120px;
+  margin-bottom: 6vh;
 `
 
 const ButtonClose = styled.a`
@@ -158,7 +165,10 @@ const ContainerHero = styled.div`
   justify-content: center;
 `
 
-const CompanyLogo = styled.img``
+const CompanyLogo = styled.img`
+  margin: 5vh auto;
+  height: 25vh;
+`
 
 const Copyright = styled.div`
   font-size: 14px;
@@ -176,7 +186,7 @@ const Hero = styled(BackgroundImage)`
 `
 
 const ProjectCategory = styled.div`
-  margin-bottom: 48px;
+  margin-bottom: 3vh;
 `
 
 const ProjectCategoryItem = styled.span`
@@ -215,7 +225,7 @@ const ProjectTitle = styled.h1`
 const ProjectDescription = styled.div`
   font-size: 16px;
   color: #ffffff;
-  margin-bottom: 64px;
+  margin-bottom: 5vh;
 `
 
 const Works = props => {
@@ -244,7 +254,7 @@ const Works = props => {
     }
   })
 
-  const doc = props.data.prismic.allWorkss.edges.slice(0, 1).pop()
+  const doc = props.data.allPrismicWorks.edges.slice(0, 1).pop()
   if (!doc) return null
 
   if (typeof window !== "undefined") {
@@ -254,28 +264,28 @@ const Works = props => {
 
   return (
     <Layout>
-      <SEO title={RichText.asText(doc.node.title) + " - Works"} />
+      <SEO title={doc.node.data.title.text + " - Works"} />
       <Hero
         id="top"
         Tag="div"
-        fluid={doc.node.header_imageSharp.childImageSharp.fluid}
+        fluid={doc.node.data.header_image.localFile.childImageSharp.fluid}
         backgroundColor={`#040e18`}
       >
         <ContainerHero>
-          <CompanyLogo src={doc.node.logo_company.url} />
-          <ProjectTitle>{RichText.asText(doc.node.title)}</ProjectTitle>
+          <CompanyLogo src={doc.node.data.logo_company.url} />
+          <ProjectTitle>{doc.node.data.title.text}</ProjectTitle>
           <ProjectCategory>
-            {doc.node.category.map(category => (
+            {doc.node.data.category.map(category => (
               <ProjectCategoryItem>
-                {RichText.asText(category.category_name)}
+                {category.category_name.text}
               </ProjectCategoryItem>
             ))}
           </ProjectCategory>
           <ProjectDescription>
-            {RichText.asText(doc.node.project_description)}
+            {doc.node.data.project_description.text}
           </ProjectDescription>
           <ActionWrapper>
-            <ButtonLink href={doc.node.link_website.url}>
+            <ButtonLink href={doc.node.data.link_website.url}>
               Go To Website
             </ButtonLink>
           </ActionWrapper>
@@ -287,13 +297,13 @@ const Works = props => {
       </Hero>
       <Detail id="content">
         <Container>
-          {doc.node.category.map(category => (
+          {doc.node.data.category.map(category => (
             <>
               <ProjectCategoryTitle>
-                {RichText.asText(category.category_name)}
+                {category.category_name.text}
               </ProjectCategoryTitle>
               <ProjectCategoryDetail>
-                {RichText.render(category.category_description)}
+                {RichText.render(category.category_description.raw)}
               </ProjectCategoryDetail>
             </>
           ))}

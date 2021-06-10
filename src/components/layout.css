@@ -30,6 +30,38 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: Moderat-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Moderat-Bold.otf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Merriweather-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Merriweather-Bold.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Karla-Bold;
+  font-weight: 700;
+  font-style: normal;
+  src: url("../fonts/Karla.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Karla-Regular;
+  font-weight: 400;
+  font-style: normal;
+  src: url("../fonts/Karla.ttf");
+  font-display: swap;
+}
+
 html {
   font-family: Moderat-Regular, sans-serif;
   -ms-text-size-adjust: 100%;
@@ -250,7 +282,7 @@ img {
   padding-left: 0;
   padding-right: 0;
   padding-top: 0;
-  margin-bottom: 1.45rem;
+  margin-bottom: 0;
 }
 h1 {
   margin-left: 0;
@@ -739,4 +771,35 @@ html.fp-enabled body {
   html.fp-enabled body:before {
     background-size: 70%;
   }
+}
+
+/* .ReactModal__Body--open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+} */
+
+.ReactModal__Html--open {
+  overflow: hidden;
+}
+
+.ReactModal__Overlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.ReactModal__Content{
+  outline: none;
+  width: 80vw;
+  max-width: 450px;
 }
