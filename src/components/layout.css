@@ -719,6 +719,7 @@ html.fp-enabled body {
 [type="radio"]:not(:checked) {
   position: absolute;
   left: -9999px;
+  opacity: 0;
 }
 [type="radio"]:checked + label,
 [type="radio"]:not(:checked) + label {
@@ -728,6 +729,8 @@ html.fp-enabled body {
   line-height: 16px;
   display: inline-block;
   color: #fff;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 [type="radio"]:checked + label:before,
 [type="radio"]:not(:checked) + label:before {
@@ -739,6 +742,7 @@ html.fp-enabled body {
   height: 18px;
   border: 2px solid #fff;
   border-radius: 100%;
+  cursor: pointer;
 }
 [type="radio"]:checked + label:after,
 [type="radio"]:not(:checked) + label:after {
@@ -751,6 +755,7 @@ html.fp-enabled body {
   left: 4px;
   border-radius: 100%;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 [type="radio"]:not(:checked) + label:after {
   opacity: 0;

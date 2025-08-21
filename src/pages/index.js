@@ -244,6 +244,7 @@ const RadioButton = styled.div`
   display: flex;
   align-items: center;
   margin-right: 32px;
+  position: relative;
   @media (max-width: 768px) {
     width: 50%;
     margin-right: 0;
@@ -605,8 +606,7 @@ export default ({ data }) => {
                               name="contactTopic"
                               value="Business"
                               checked={contactTopic === "Business"}
-                              onChange={() => {}}
-                              onClick={() => setContactTopic("Business")}
+                              onChange={(e) => setContactTopic(e.target.value)}
                             />
                             <label htmlFor="business">Business</label>
                           </RadioButton>
@@ -617,8 +617,7 @@ export default ({ data }) => {
                               name="contactTopic"
                               value="Jobs"
                               checked={contactTopic === "Jobs"}
-                              onChange={() => {}}
-                              onClick={() => setContactTopic("Jobs")}
+                              onChange={(e) => setContactTopic(e.target.value)}
                             />
                             <label htmlFor="jobs">Jobs &amp; Internship</label>
                           </RadioButton>
