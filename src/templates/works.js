@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
 import { graphql } from "gatsby"
+import { getImage } from "gatsby-plugin-image"
+import { convertToBgImage } from "gbimage-bridge"
+import BackgroundImage from "gatsby-background-image"
 import { RichText } from "prismic-reactjs"
 import Layout from "../components/layout"
 import styled, { keyframes } from "styled-components"
-import BackgroundImage from "gatsby-background-image"
 import iconClose from "../images/ic-close.svg"
 import iconArrowDown from "../images/ic-arrow-down.svg"
 import iconArrowUp from "../images/ic-arrow-up.svg"
@@ -26,11 +28,14 @@ export const query = graphql`
               url
             }
             header_image {
+              url
               localFile {
                 childImageSharp {
-                  fluid(maxWidth: 2660, webpQuality: 100) {
-                    ...GatsbyImageSharpFluid_withWebp
-                  }
+                  gatsbyImageData(
+                    width: 2660
+                    placeholder: BLURRED
+                    formats: [AUTO, WEBP, AVIF]
+                  )
                 }
               }
             }
@@ -255,7 +260,13 @@ const Works = props => {
   })
 
   const doc = props.data.allPrismicWorks.edges.slice(0, 1).pop()
-  if (!doc) return null
+  if (!doc || !doc.node || !doc.node.data) return null
+
+  const workData = doc.node.data
+
+  // Get the image using getImage and convert it for BackgroundImage
+  const image = workData.header_image?.localFile ? getImage(workData.header_image.localFile) : null
+  const bgImage = image ? convertToBgImage(image) : null
 
   if (typeof window !== "undefined") {
     // eslint-disable-next-line global-require
@@ -264,48 +275,100 @@ const Works = props => {
 
   return (
     <Layout>
-      <SEO title={doc.node.data.title.text + " - Works"} />
-      <Hero
-        id="top"
-        Tag="div"
-        fluid={doc.node.data.header_image.localFile.childImageSharp.fluid}
-        backgroundColor={`#040e18`}
-      >
-        <ContainerHero>
-          <CompanyLogo src={doc.node.data.logo_company.url} />
-          <ProjectTitle>{doc.node.data.title.text}</ProjectTitle>
-          <ProjectCategory>
-            {doc.node.data.category.map(category => (
-              <ProjectCategoryItem>
-                {category.category_name.text}
-              </ProjectCategoryItem>
-            ))}
-          </ProjectCategory>
-          <ProjectDescription>
-            {doc.node.data.project_description.text}
-          </ProjectDescription>
-          <ActionWrapper>
-            <ButtonLink href={doc.node.data.link_website.url}>
-              Go To Website
-            </ButtonLink>
-          </ActionWrapper>
-          <ButtonScrollDown
-            onClick={() => scrollTo("#content")}
-          ></ButtonScrollDown>
-          <ButtonClose href="/#works"></ButtonClose>
-        </ContainerHero>
-      </Hero>
+      <SEO title={(workData.title?.text || "Untitled") + " - Works"} />
+      
+      {bgImage ? (
+        <Hero
+          id="top"
+          Tag="section"
+          {...bgImage}
+          preserveStackingContext
+        >
+          <ContainerHero>
+              {workData.logo_company?.url && (
+                <CompanyLogo src={workData.logo_company.url} alt="Company Logo" />
+              )}
+              <ProjectTitle>{workData.title?.text || "Untitled Project"}</ProjectTitle>
+              {workData.category && workData.category.length > 0 && (
+                <ProjectCategory>
+                  {workData.category.map((category, index) => (
+                    <ProjectCategoryItem key={index}>
+                      {category.category_name?.text || ""}
+                    </ProjectCategoryItem>
+                  ))}
+                </ProjectCategory>
+              )}
+              <ProjectDescription>
+                {workData.project_description?.text || ""}
+              </ProjectDescription>
+              <ActionWrapper>
+                {workData.link_website?.url && (
+                  <ButtonLink href={workData.link_website.url}>
+                    Go To Website
+                  </ButtonLink>
+                )}
+              </ActionWrapper>
+              <ButtonScrollDown
+                onClick={() => scrollTo("#content")}
+              ></ButtonScrollDown>
+              <ButtonClose href="/#works"></ButtonClose>
+          </ContainerHero>
+        </Hero>
+      ) : (
+        <div 
+          id="top"
+          style={{
+            minHeight: '100vh',
+            position: 'relative',
+            backgroundColor: '#040e18',
+            backgroundImage: workData.header_image?.url ? `url(${workData.header_image.url})` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        >
+          <ContainerHero>
+            {workData.logo_company?.url && (
+              <CompanyLogo src={workData.logo_company.url} alt="Company Logo" />
+            )}
+            <ProjectTitle>{workData.title?.text || "Untitled Project"}</ProjectTitle>
+            {workData.category && workData.category.length > 0 && (
+              <ProjectCategory>
+                {workData.category.map((category, index) => (
+                  <ProjectCategoryItem key={index}>
+                    {category.category_name?.text || ""}
+                  </ProjectCategoryItem>
+                ))}
+              </ProjectCategory>
+            )}
+            <ProjectDescription>
+              {workData.project_description?.text || ""}
+            </ProjectDescription>
+            <ActionWrapper>
+              {workData.link_website?.url && (
+                <ButtonLink href={workData.link_website.url}>
+                  Go To Website
+                </ButtonLink>
+              )}
+            </ActionWrapper>
+            <ButtonScrollDown
+              onClick={() => scrollTo("#content")}
+            ></ButtonScrollDown>
+            <ButtonClose href="/#works"></ButtonClose>
+          </ContainerHero>
+        </div>
+      )}
+      
       <Detail id="content">
         <Container>
-          {doc.node.data.category.map(category => (
-            <>
+          {workData.category && workData.category.map((category, index) => (
+            <div key={index}>
               <ProjectCategoryTitle>
-                {category.category_name.text}
+                {category.category_name?.text || ""}
               </ProjectCategoryTitle>
               <ProjectCategoryDetail>
-                {RichText.render(category.category_description.raw)}
+                {category.category_description?.raw && RichText.render(category.category_description.raw)}
               </ProjectCategoryDetail>
-            </>
+            </div>
           ))}
           <Copyright>2020 © Naisu Studio</Copyright>
         </Container>

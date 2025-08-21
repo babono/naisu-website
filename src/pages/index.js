@@ -458,7 +458,6 @@ export const query = graphql`
               alt
               copyright
               url
-              thumbnails
               localFile {
                 childImageSharp {
                   fluid(maxWidth: 835, quality: 100) {
@@ -475,23 +474,52 @@ export const query = graphql`
 `
 
 const RenderWorkList = ({ works }) => {
-  return works.map(item => (
-    <WorksItem key={item.node.uid} to={"/w/" + item.node.uid}>
-      <Img
-        fluid={item.node.data.image_thumbnail.localFile.childImageSharp.fluid}
-      />
-      <WorksInfo>{item.node.data.title.text}</WorksInfo>
-    </WorksItem>
-  ))
+  console.log('RenderWorkList received works:', works)
+  console.log('Number of works items:', works.length)
+  if (works.length > 0) {
+    console.log('First work item:', JSON.stringify(works[0], null, 2))
+  }
+  
+  return works.map(item => {
+    const imageFluid = item.node.data.image_thumbnail?.localFile?.childImageSharp?.fluid
+    const imageUrl = item.node.data.image_thumbnail?.url
+    const title = item.node.data.title?.text
+    
+    console.log(`Item ${item.node.uid}:`, { 
+      hasImageFluid: !!imageFluid, 
+      hasImageUrl: !!imageUrl, 
+      title: title,
+      imageThumb: item.node.data.image_thumbnail 
+    })
+    
+    return (
+      <WorksItem key={item.node.uid} to={"/w/" + item.node.uid}>
+        {imageFluid ? (
+          <Img fluid={imageFluid} />
+        ) : imageUrl ? (
+          <img src={imageUrl} alt={item.node.data.image_thumbnail?.alt || title} style={{width: '100%', height: 'auto'}} />
+        ) : (
+          <div style={{background: '#ccc', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            No Image
+          </div>
+        )}
+        <WorksInfo>{title || 'Untitled'}</WorksInfo>
+      </WorksItem>
+    )
+  })
 }
 
-export default ({ data }) => {
-  const doc = data.allPrismicWorks.edges.slice(0, 1).pop()
-  const doc2 = data.allPrismicSections.edges.slice(0, 1).pop()
-  const doc3 = data.allPrismicReach.edges.slice(0, 1).pop()
-  if (!doc || !doc2 || !doc3) return null
-
+const HomePage = ({ data }) => {
+  console.log('HomePage received data:', data)
+  console.log('allPrismicWorks edges:', data.allPrismicWorks.edges)
+  console.log('Number of works edges:', data.allPrismicWorks.edges.length)
+  
   const [contactTopic, setContactTopic] = useState("Business")
+  
+  const doc = data.allPrismicWorks.edges.slice(0, 1).pop()
+  const doc2 = data.allPrismicSections?.edges?.slice(0, 1).pop()
+  const doc3 = data.allPrismicReach?.edges?.slice(0, 1).pop()
+  if (!doc) return null
 
   return (
     <Layout>
@@ -505,9 +533,9 @@ export default ({ data }) => {
         <meta property="og:image" content={ogNaisu} />
       </Helmet>
       <BgStyle
-        bgImageHome={doc2.node.data.background_image_section_1.url}
-        bgImageIntro={doc2.node.data.background_image_section_2.url}
-        bgImageAbout={doc2.node.data.background_image_section_3.url}
+        bgImageHome={doc2?.node?.data?.background_image_section_1?.url || ''}
+        bgImageIntro={doc2?.node?.data?.background_image_section_2?.url || ''}
+        bgImageAbout={doc2?.node?.data?.background_image_section_3?.url || ''}
       />
       <Header>
         <HeaderContainer>
@@ -532,22 +560,25 @@ export default ({ data }) => {
             <ReactFullpage.Wrapper>
               <section className="section">
                 <Container>
-                  <IntroText1>{doc2.node.data.text_section_1.text}</IntroText1>
+                  <IntroText1>{doc2?.node?.data?.text_section_1?.text || 'Welcome to NAISU Studio'}</IntroText1>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroImage
-                    src={doc2.node.data.image_text_section_2.url}
+                    src={doc2?.node?.data?.image_text_section_2?.url || ''}
                     alt="image introducing"
                   />
-                  <IntroText2>{doc2.node.data.text_section_2.text}</IntroText2>
+                  <IntroText2>{doc2?.node?.data?.text_section_2?.text || 'Creative solutions for your business'}</IntroText2>
                 </Container>
               </section>
               <section className="section">
                 <Container>
                   <IntroText3>
-                    {RichText.render(doc2.node.data.text_section_3.raw)}
+                    {doc2?.node?.data?.text_section_3?.raw ? 
+                      RichText.render(doc2.node.data.text_section_3.raw) : 
+                      'About our creative studio and expertise.'
+                    }
                   </IntroText3>
                 </Container>
               </section>
@@ -562,26 +593,35 @@ export default ({ data }) => {
                 <Container>
                   <ContactContainer>
                     <ContactInfo>
-                      <AddressTitle>{doc3.node.data.title.text}</AddressTitle>
+                      <AddressTitle>{doc3?.node?.data?.title?.text || 'Contact Us'}</AddressTitle>
                       <AddressDetail>
-                        <RichText render={doc3.node.data.address.raw} />
+                        {doc3?.node?.data?.address?.raw ? 
+                          <RichText render={doc3.node.data.address.raw} /> :
+                          'Our Office Location'
+                        }
                       </AddressDetail>
                       <ContactText>
-                        {RichText.asText(doc3.node.data.email.raw)}
+                        {doc3?.node?.data?.email?.raw ? 
+                          RichText.asText(doc3.node.data.email.raw) :
+                          'hello@naisu.studio'
+                        }
                       </ContactText>
                       <ContactText>
-                        {RichText.asText(doc3.node.data.phone.raw)}
+                        {doc3?.node?.data?.phone?.raw ? 
+                          RichText.asText(doc3.node.data.phone.raw) :
+                          '+62 123 456 789'
+                        }
                       </ContactText>
                       <Social>
                         <SocialTitle>Our Social</SocialTitle>
-                        {doc3.node.data.social.map(social => (
-                          <div>
+                        {doc3?.node?.data?.social ? doc3.node.data.social.map(social => (
+                          <div key={social.name.text}>
                             <SocialItem href={social.link.url}>
                               <SocialIcon src={social.icon.url} />
                               <SocialName>{social.name.text}</SocialName>
                             </SocialItem>
                           </div>
-                        ))}
+                        )) : null}
                       </Social>
                     </ContactInfo>
 
@@ -680,3 +720,5 @@ export default ({ data }) => {
     </Layout>
   )
 }
+
+export default HomePage

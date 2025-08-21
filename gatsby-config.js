@@ -11,7 +11,6 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-smoothscroll`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -40,19 +39,6 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-facebook-pixel`,
-      options: {
-        pixelId: "386207062795039",
-      },
-    },
-    {
-      resolve: "gatsby-plugin-google-tagmanager",
-      options: {
-        id: "G-CYK48Y06FH",
-        includeInDevelopment: false,        
-      },
-    },
-    {
       resolve: 'gatsby-source-prismic',
       options: {
         repositoryName: 'babono',
@@ -63,26 +49,15 @@ module.exports = {
           tiktok_video: require('./src/schemas/tiktok_video.json'),
           tiktok: require('./src/schemas/tiktok.json'),
           works: require('./src/schemas/works.json'),
-        },     
-        shouldDownloadImage: ({ node, key, value }) => {
-          // Return true to download the image or false to skip.
-          return true
-        },   
+          tiktokvideos: {},
+          badge: {},
+          badge1: {}
+        },
       },
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
-    {
-      resolve: `gatsby-plugin-modal-routing`,
-      options: {
-        appElement: '#___gatsby',
-        modalProps: { 
-          overlayClassName: "ReactModal__Overlay",
-          className: "ReactModal__Content",
-          htmlOpenClassName: "ReactModal__Html--open",            
-        }
-      }
-    },
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -95,8 +70,5 @@ module.exports = {
         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
       },
     },
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    `gatsby-plugin-offline`,
   ],
 }
